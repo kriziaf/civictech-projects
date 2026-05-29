@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - Responsible AI Ecosystem Blueprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Fraunces:wght@300;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a1628;
+            --accent: #ff6b35;
+            --accent-light: #ff8c61;
+            --text: #2d3748;
+            --text-light: #718096;
+            --bg: #fafafa;
+            --bg-alt: #f7f9fc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent-light);
+            transform: translateX(-5px);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            padding: 0.75rem 2rem;
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--bg-alt);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .intro-section {
+            margin-bottom: 3rem;
+        }
+
+        .intro-section h2 {
+            margin-top: 0;
+        }
+
+        .thesis {
+            background: var(--bg-alt);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-top: 1rem;
+        }
+
+        .thesis strong {
+            color: var(--accent);
+        }
+
+        .concepts-section {
+            margin-bottom: 3rem;
+        }
+
+        .concept-card {
+            background: var(--bg-alt);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            position: relative;
+            border-top: 3px solid var(--primary);
+        }
+
+        .concept-number {
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .concept-card h3 {
+            margin-top: 0.5rem;
+        }
+
+        .concept-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+
+        .concept-card ul li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .concept-card ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .implications-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2942 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            margin-top: 3rem;
+        }
+
+        .implications-section h2 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .implications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .implication-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .implication-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .bullet {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 1.5rem;
+            }
+
+            .concept-card {
+                padding: 1.5rem;
+            }
+
+            .implications-section {
+                padding: 1.5rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+        }
+
+        /* Blindspots specific styles */
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .system-overview {
+            margin-bottom: 3rem;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .overview-card {
+            background: var(--bg-alt);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--text-light);
+        }
+
+        .overview-card.ecosystem {
+            border-left-color: var(--accent);
+            background: linear-gradient(135deg, #fff5f0 0%, var(--bg-alt) 100%);
+        }
+
+        .overview-card strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .blindspots-section {
+            margin-bottom: 3rem;
+        }
+
+        .blindspot-card {
+            background: white;
+            border: 2px solid var(--bg-alt);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .blindspot-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2942 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .blindspot-number {
+            background: var(--accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .blindspot-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .blindspot-content {
+            padding: 2rem;
+        }
+
+        .what-designers-do,
+        .what-ecosystem-reveals {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 6px;
+        }
+
+        .what-designers-do {
+            background: transparent;
+            border-left: 4px solid #9ca3af;
+        }
+
+        .what-ecosystem-reveals {
+            background: transparent;
+            border-left: 4px solid #9ca3af;
+        }
+
+        .designer-blindspot {
+            background: #fef2f2;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid #dc2626;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .blindspot-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+        }
+
+        .blindspot-content ul li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .blindspot-content ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .solution-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 2.5rem;
+            border-radius: 8px;
+            margin-bottom: 3rem;
+        }
+
+        .solution-section h2 {
+            margin-top: 0;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .solution-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-top: 3px solid #3b82f6;
+        }
+
+        .solution-card h3 {
+            color: #1e40af;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .solution-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .solution-card ul li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .solution-card ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .bottom-line {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .bottom-line h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .comparison-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .traditional-box,
+        .ecosystem-box {
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: #f3f4f6;
+            border: 2px solid #d1d5db;
+        }
+
+        .traditional-box h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .ecosystem-box h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .comparison-boxes ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .comparison-boxes ul li {
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .final-message {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+
+        /* Use Cases tab styles */
+        .page-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .use-case-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--blue);
+            border: 2px solid var(--bg-alt);
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent);
+        }
+
+        .use-case-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .use-case-description {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-outcome {
+            padding: 1rem;
+            background: var(--bg-alt);
+            border-left: 3px solid var(--accent);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .use-case-outcome strong {
+            color: var(--accent);
+        }
+
+        /* Introduction article styles */
+        .introduction-article {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .introduction-article h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .introduction-article h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .introduction-article p {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .introduction-article .reference {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--bg-alt);
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Case Study intro styles */
+        .case-study-intro {
+            margin-bottom: 3rem;
+        }
+
+        .case-study-intro h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .case-study-intro h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+        }
+
+        .case-study-intro p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .overview-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .overview-item {
+            padding: 1.5rem;
+            background: var(--bg-alt);
+            border-radius: 6px;
+            border-left: 4px solid var(--text-light);
+        }
+
+        .overview-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .overview-item p {
+            margin: 0;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="./index.html" class="back-link">← Back to Home</a>
+        <h1>Explore</h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" data-tab="introduction">Introduction</button>
+            <button class="tab-button" data-tab="framework">Key Concepts</button>
+            <button class="tab-button" data-tab="blindspots">Case Study</button>
+            <button class="tab-button" data-tab="design">Design Approach</button>
+            <button class="tab-button" data-tab="usecases">Design Challenge</button>
+        </div>
+        
+        <div class="content" id="introduction-content">
+            <article class="introduction-article">
+                <h2>Who's Responsible When AI Goes Wrong? A New Framework for the Age of Intelligent Systems</h2>
+                <p class="subtitle">A groundbreaking study argues we need to rethink how we assign accountability in AI—moving from blaming individuals to coordinating entire ecosystems</p>
+
+                <p>Artificial intelligence systems promise enormous benefits, from diagnosing diseases to optimizing energy use. But they also raise a troubling question that's becoming harder to ignore: when something goes wrong with an AI system, who's actually responsible?</p>
+
+                <p>A new paper by Bernd Carsten Stahl, published in a leading ethics journal, argues that the current approaches to AI responsibility are fundamentally inadequate—and proposes a radical shift in how we think about accountability for intelligent systems.</p>
+
+                <h3>The Responsibility Problem</h3>
+
+                <p>The AI ethics conversation has exploded in recent years, covering everything from algorithmic bias and fairness to the concentration of power in Big Tech. But according to Stahl, one critical issue hasn't received enough attention: the question of where moral responsibility for AI systems actually resides.</p>
+
+                <p>"The answer to this question is well-discussed and depends on the underlying technology, its application, social context, and other factors," Stahl writes. The usual suspects include developers who build the systems, users who deploy them, companies that own them, regulators who oversee them—or even, some argue, the AI systems themselves.</p>
+
+                <p>The problem? None of these answers are satisfying.</p>
+
+                <h3>Why Traditional Responsibility Models Fail</h3>
+
+                <p>Traditional approaches to responsibility assume you can point to a specific actor and say, "You're accountable for this outcome." But AI systems don't work that way.</p>
+
+                <p>Intelligent systems are what scholars call "complex socio-technical systems"—webs of interconnected technologies, organizations, people, and rules. They're often "nested and build on one another," forming what Stahl describes as "systems of systems." The AI landscape has become so intricate that experts have started using a new metaphor to describe it: ecosystems.</p>
+
+                <p>Just as a biological ecosystem involves countless interdependent organisms, an AI ecosystem involves multiple actors whose actions and responsibilities overlap, conflict, and cascade in unpredictable ways. A facial recognition system, for instance, involves data providers, algorithm developers, cloud infrastructure companies, the organizations deploying it, regulators setting rules, and the people subject to its decisions—all with different responsibilities that interact in complex ways.</p>
+
+                <h3>Introducing Meta-Responsibility</h3>
+
+                <p>Stahl's solution is what he calls meta-responsibility: a higher-level form of accountability focused not on who is responsible for specific outcomes, but on who is responsible for ensuring the entire ecosystem of responsibilities functions properly.</p>
+
+                <p>"We need to consider which responsibility ascriptions are required to render the overall ecosystem responsible," he argues. In other words, instead of just asking "Who caused this harm?" we should ask "Who is responsible for making sure all the different responsibilities in this system work together effectively?"</p>
+
+                <p>This isn't about letting individuals off the hook. Developers, companies, and regulators still have their traditional responsibilities. But meta-responsibility adds a crucial coordination layer—ensuring these separate responsibilities don't contradict each other, leave gaps, or create situations where everyone assumes someone else is handling a problem.</p>
+
+                <h3>Why This Matters</h3>
+
+                <p>This framework has implications for multiple groups, according to Stahl:</p>
+
+                <p>For researchers and philosophers, it offers a new lens for analyzing AI ethics that moves beyond individual moral agents to system-level accountability.</p>
+
+                <p>For technical experts and developers, it provides "an avenue of reflecting on ethical questions more holistically" rather than getting stuck in abstract debates about who's to blame. By understanding their work within a broader ecosystem, they can identify practical steps toward building more socially acceptable AI systems.</p>
+
+                <p>For policymakers, it suggests that effective AI governance requires more than just assigning responsibilities—it requires actively coordinating how different responsibilities interact and ensuring the overall system supports accountability.</p>
+
+                <h3>A New Way Forward</h3>
+
+                <p>As AI systems become more capable and more deeply embedded in society, the question of responsibility becomes more urgent. Stahl's ecosystem approach doesn't offer easy answers, but it does offer something perhaps more valuable: a framework for asking better questions.</p>
+
+                <p>Instead of endless debates about whether the algorithm developer or the deploying organization is "really" responsible when an AI system causes harm, we can ask: Is our ecosystem of responsibilities set up to prevent such harms? Are there gaps where no one is clearly accountable? Do different actors' responsibilities conflict with each other? Who is responsible for fixing those coordination failures?</p>
+
+                <p>The shift from individual responsibility to ecosystem accountability might seem abstract. But for healthcare workers deciding whether to trust an AI diagnosis, job seekers facing algorithmic screening, or communities subject to predictive policing, getting responsibility right isn't theoretical—it's essential.</p>
+
+                <p>As Stahl's research suggests, the path to more ethical AI might not run through finding the right person to blame, but through building systems where responsibility itself is properly coordinated, maintained, and—crucially—answerable when things go wrong.</p>
+
+                <p class="reference"><em>Reference: Stahl, B.C. (2023). "Embedding Responsibility in Intelligent Systems: From AI Ethics to Responsible AI Ecosystems"</em></p>
+            </article>
+        </div>
+
+        <div class="content" id="framework-content" style="display: none;">
+            <div class="intro-section">
+                <h2>Central Framework</h2>
+                <div class="thesis">
+                    <strong>Core Thesis:</strong> AI responsibility must shift from fixing isolated ethical issues in individual systems to coordinating responsibility across entire socio-technical ecosystems.
+                </div>
+            </div>
+
+            <div class="concepts-section">
+                <h2>Key Concepts</h2>
+                
+                <div class="concept-card">
+                    <div class="concept-number">1</div>
+                    <h3>AI as Ecosystem, Not Tool</h3>
+                    <ul>
+                        <li>AI functions through interconnected networks of people, technologies, institutions, and rules</li>
+                        <li>Outcomes emerge from interactions, not single actors</li>
+                        <li>Traditional single-point accountability models fail</li>
+                    </ul>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-number">2</div>
+                    <h3>Meta-Responsibility</h3>
+                    <ul>
+                        <li>Higher-order responsibility for coordinating all other responsibilities</li>
+                        <li>Ensures responsibility relationships support each other</li>
+                        <li>Aims for collective outcomes that are socially acceptable and sustainable</li>
+                    </ul>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-number">3</div>
+                    <h3>Responsible AI Ecosystems</h3>
+                    <ul>
+                        <li>Not morally responsible themselves, but enable clear accountability</li>
+                        <li>Make it possible to answer "who is accountable for what?"</li>
+                        <li>Require: clear boundaries, shared knowledge base, adaptive governance</li>
+                    </ul>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-number">4</div>
+                    <h3>Responsibility as Network</h3>
+                    <ul>
+                        <li>Distributed across developers, organizations, regulators, users, infrastructure</li>
+                        <li>Must be mapped and coordinated, not isolated</li>
+                        <li>Overlaps, gaps, and conflicts must be identified</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="implications-section">
+                <h2>Practical Tips:</h2>
+                <div class="implications-list">
+                    <div class="implication-item">
+                        <span class="bullet">→</span>
+                        <span>Design for answerability (who can explain outcomes), not just usability</span>
+                    </div>
+                    <div class="implication-item">
+                        <span class="bullet">→</span>
+                        <span>Responsibility mapping as essential practice</span>
+                    </div>
+                    <div class="implication-item">
+                        <span class="bullet">→</span>
+                        <span>Ethics as coordination work, not rule-setting</span>
+                    </div>
+                    <div class="implication-item">
+                        <span class="bullet">→</span>
+                        <span>Governance must be adaptive, not static</span>
+                    </div>
+                    <div class="implication-item">
+                        <span class="bullet">→</span>
+                        <span>Designers are participants in responsibility networks, not just interface creators</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="blindspots-content" style="display: none;">
+            <div class="case-study-intro">
+                <h2>Ethical AI Blindspots in Patient Health Data Tracking</h2>
+                <p class="subtitle">Using the Responsible AI Ecosystems Framework</p>
+                <p>Let me analyze a patient health data tracking system through Stahl's ecosystem lens to identify critical blindspots that traditional AI ethics approaches would miss.</p>
+                
+                <h3 style="margin-top: 2rem;">System Overview: Patient Health Data Tracking</h3>
+                
+                <div class="overview-comparison">
+                    <div class="overview-item">
+                        <strong>Typical description:</strong>
+                        <p>An AI system that monitors patient vitals, predicts health deterioration, and alerts healthcare providers.</p>
+                    </div>
+                    
+                    <div class="overview-item">
+                        <strong>Ecosystem reality:</strong>
+                        <p>A complex network involving patients, family members, nurses, doctors, hospital administrators, insurance companies, device manufacturers, cloud providers, regulators (HIPAA, FDA), EMR systems, and downstream research uses.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blindspots-section">
+                <h2>Critical Blindspots When Using Traditional AI Ethics</h2>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">1</div>
+                        <h3>The "Responsible Feature" Trap</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically do:</strong>
+                            <ul>
+                                <li>Add consent toggles</li>
+                                <li>Build explainable AI dashboards showing why an alert was triggered</li>
+                                <li>Ensure the model is "fair" across demographic groups</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <ul>
+                                <li>The real responsibility gap: Who answers when a patient's data flows from the tracking system → hospital EMR → insurance risk scoring → premium increases?</li>
+                                <li>The "responsible feature" (explainability) only covers the alert, not the data's downstream journey</li>
+                                <li>Consent at onboarding cannot cover uses that emerge later in the ecosystem</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> Treating ethics as a property of the tracking interface, rather than the entire data flow across institutional boundaries.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">2</div>
+                        <h3>Assuming Single-Point Accountability</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically assume:</strong>
+                            <ul>
+                                <li>The hospital is responsible for clinical decisions</li>
+                                <li>The patient is responsible for data sharing choices</li>
+                                <li>The vendor is responsible for algorithm accuracy</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <p style="margin-bottom: 0.5rem;">Distributed, interdependent responsibilities:</p>
+                            <ul>
+                                <li><strong>Device manufacturer:</strong> responsible for sensor accuracy</li>
+                                <li><strong>Cloud provider:</strong> responsible for uptime and security</li>
+                                <li><strong>Algorithm developer:</strong> responsible for prediction validity</li>
+                                <li><strong>Nurse:</strong> responsible for responding to alerts</li>
+                                <li><strong>Doctor:</strong> responsible for treatment decisions</li>
+                                <li><strong>Hospital admin:</strong> responsible for staffing levels that affect response time</li>
+                                <li><strong>Patient:</strong> responsible for wearing the device</li>
+                                <li><strong>Insurance:</strong> responsible for coverage decisions based on data</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> When an alert is missed and a patient deteriorates, who is accountable? The answer is "it depends on which part failed"—but the system doesn't make this clear.<br><br>
+                            <strong>Missing design element:</strong> No mechanism to trace accountability chains when harm occurs.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">3</div>
+                        <h3>The Boundary Problem</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically scope:</strong>
+                            <ul>
+                                <li>"Our system monitors vitals and generates alerts"</li>
+                                <li>Design ends at the alert notification</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <p style="margin-bottom: 0.5rem;">Unclear boundaries create responsibility voids:</p>
+                            <ul>
+                                <li>Does "the system" include the wearable device? The mobile app? The hospital's alert management platform?</li>
+                                <li>Does responsibility end when the alert is sent, or when it's acknowledged? Or when action is taken?</li>
+                                <li>What about alerts sent at 3am when staffing is minimal?</li>
+                                <li>What about data retention after the patient is discharged?</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> Not defining where the system's responsibility begins and ends in time, space, and institutional context.<br><br>
+                            <strong>Real-world consequence:</strong> A patient deteriorates because the night nurse was overwhelmed with alerts from multiple systems. Who failed? The tracking system for generating the alert? The hospital for understaffing? The alert management system for poor prioritization?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">4</div>
+                        <h3>Static Governance in a Dynamic Ecosystem</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically build:</strong>
+                            <ul>
+                                <li>Fixed privacy settings</li>
+                                <li>One-time ethics review before launch</li>
+                                <li>Compliance with HIPAA at deployment</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <p style="margin-bottom: 0.5rem;">The system evolves, but governance doesn't:</p>
+                            <ul>
+                                <li>New use case emerges: Hospital wants to use aggregated data for predictive staffing models</li>
+                                <li>Insurance company requests access to "anonymized" trends</li>
+                                <li>Researchers want to train new models on historical data</li>
+                                <li>Device firmware updates change what data is collected</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> No mechanism for adaptive governance—updating responsibility assignments as the ecosystem changes.<br><br>
+                            <strong>Missing design element:</strong> Ways to revisit consent, re-assess risks, and re-negotiate responsibilities as new actors or uses enter the ecosystem.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">5</div>
+                        <h3>Knowledge Gaps Across the Ecosystem</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically assume:</strong>
+                            <ul>
+                                <li>Doctors understand how the AI works</li>
+                                <li>Patients understand what they're consenting to</li>
+                                <li>Administrators understand the system's limitations</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <p style="margin-bottom: 0.5rem;">Fragmented knowledge undermines responsibility:</p>
+                            <ul>
+                                <li>Nurses don't know the algorithm was trained primarily on white, male patients (fairness issue)</li>
+                                <li>Patients don't know their "anonymized" data is being sold to pharmaceutical companies</li>
+                                <li>Doctors don't know the system performs poorly for patients with multiple chronic conditions</li>
+                                <li>Hospital administrators don't know the system's alert threshold was optimized for cost reduction, not clinical outcomes</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> Assuming technical documentation = shared understanding across all ecosystem actors.<br><br>
+                            <strong>Missing design element:</strong> Mechanisms to maintain and share socio-technical knowledge—not just technical specs, but how the system functions in its full social and institutional context.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">6</div>
+                        <h3>Conflicting Responsibilities Create Ethical Collapse</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically address:</strong>
+                            <ul>
+                                <li>Individual ethical principles (fairness, transparency, privacy)</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <p style="margin-bottom: 0.5rem;">Responsibilities that contradict each other:</p>
+                            <ul>
+                                <li>Hospital's responsibility to reduce costs vs. responsibility to provide quality care</li>
+                                <li>Vendor's responsibility to maximize accuracy vs. responsibility to protect privacy (more data = better models)</li>
+                                <li>Doctor's responsibility to trust clinical judgment vs. responsibility to follow AI recommendations</li>
+                                <li>Patient's responsibility to share data for their care vs. responsibility to protect their privacy from insurance discrimination</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> Not recognizing that these conflicts exist within the system's design, creating situations where responsible action by one actor undermines responsible action by another.<br><br>
+                            <strong>Real-world consequence:</strong> A doctor ignores an alert because they've learned the system has high false-positive rates. A patient deteriorates. Was the doctor irresponsible for ignoring it, or was the system irresponsible for "crying wolf"?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blindspot-card">
+                    <div class="blindspot-header">
+                        <div class="blindspot-number">7</div>
+                        <h3>The Answerability Void</h3>
+                    </div>
+                    
+                    <div class="blindspot-content">
+                        <div class="what-designers-do">
+                            <strong>What designers typically build:</strong>
+                            <ul>
+                                <li>Audit logs of system actions</li>
+                                <li>Explainability for AI predictions</li>
+                            </ul>
+                        </div>
+
+                        <div class="what-ecosystem-reveals">
+                            <strong>What the ecosystem reveals:</strong>
+                            <p style="margin-bottom: 0.5rem;">No one can answer key questions when things go wrong:</p>
+                            <ul>
+                                <li><strong>"Why was this patient's deterioration not caught?"</strong><br>Was it the algorithm? The alert threshold? The nurse's workload? The hospital's staffing policy?</li>
+                                <li><strong>"Why is this patient's premium increasing?"</strong><br>Was it their tracking data? A third-party data broker? A different risk model?</li>
+                            </ul>
+                        </div>
+
+                        <div class="designer-blindspot">
+                            <strong>Designer blindspot:</strong> Building for explainability (what the AI did) but not answerability (who can be held accountable across the ecosystem).<br><br>
+                            <strong>Missing design element:</strong>
+                            <ul>
+                                <li>Responsibility maps visible to patients and providers</li>
+                                <li>Clear escalation paths when harm occurs</li>
+                                <li>Mechanisms for contesting decisions that involve multiple actors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="design-content" style="display: none;">
+            <div class="solution-section">
+                <h2>What a Responsible AI Ecosystem Approach Would Look Like</h2>
+                <div class="subtitle">Design for Meta-Responsibility</div>
+                <p style="margin-bottom: 2rem;">Instead of just designing the tracking interface, design the coordination infrastructure:</p>
+
+                <div class="solution-grid">
+                    <div class="solution-card">
+                        <h3>Responsibility Mapping Interface</h3>
+                        <ul>
+                            <li>Visual map showing: device manufacturer → vendor → hospital → insurance → patient</li>
+                            <li>Each actor's specific responsibilities documented and accessible</li>
+                            <li>Clear indication of where responsibilities overlap or conflict</li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-card">
+                        <h3>Adaptive Consent Architecture</h3>
+                        <ul>
+                            <li>Not one-time consent, but ongoing consent negotiation as new uses emerge</li>
+                            <li>Patients can see when their data enters new parts of the ecosystem</li>
+                            <li>Mechanisms to withdraw consent from specific downstream uses</li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-card">
+                        <h3>Ecosystem Boundary Documentation</h3>
+                        <ul>
+                            <li>Explicit definition: "This system's responsibility ends when an alert reaches the hospital's alert management system"</li>
+                            <li>Service-level agreements that clarify handoff points between actors</li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-card">
+                        <h3>Knowledge Infrastructure</h3>
+                        <p style="margin-bottom: 0.5rem;">Not just technical documentation, but shared ethical and social knowledge:</p>
+                        <ul>
+                            <li>How was the algorithm trained? (accessible to clinicians, not just data scientists)</li>
+                            <li>What are known failure modes? (accessible to patients and administrators)</li>
+                            <li>How do staffing levels affect system performance? (visible to hospital leadership)</li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-card">
+                        <h3>Answerability Mechanisms</h3>
+                        <p style="margin-bottom: 0.5rem;">When harm occurs, a clear process to trace:</p>
+                        <ul>
+                            <li>Which actor(s) had relevant responsibilities</li>
+                            <li>Which actor(s) had the knowledge needed to prevent harm</li>
+                            <li>Which actor(s) had the authority to intervene</li>
+                        </ul>
+                        <p style="font-style: italic; margin-top: 0.5rem;">Not to assign blame, but to learn and improve ecosystem coordination</p>
+                    </div>
+
+                    <div class="solution-card">
+                        <h3>Conflict Resolution Design</h3>
+                        <ul>
+                            <li>Explicit acknowledgment of conflicting responsibilities</li>
+                            <li>Design choices that make conflicts visible (e.g., showing doctors when an alert is optimized for cost vs. clinical outcomes)</li>
+                            <li>Governance processes to negotiate when responsibilities conflict</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-line">
+                <h2>Bottom Line for Designers</h2>
+                
+                <div class="comparison-boxes">
+                    <div class="traditional-box">
+                        <h3>Traditional AI ethics would have you focus on:</h3>
+                        <ul>
+                            <li>✅ Is the algorithm fair?</li>
+                            <li>✅ Is the interface transparent?</li>
+                            <li>✅ Did we get consent?</li>
+                        </ul>
+                    </div>
+
+                    <div class="ecosystem-box">
+                        <h3>Responsible AI ecosystems asks you to design for:</h3>
+                        <ul>
+                            <li>❓ Can we answer who is accountable when things go wrong?</li>
+                            <li>❓ Are responsibilities coordinated across all actors?</li>
+                            <li>❓ Can the system adapt as new uses and actors emerge?</li>
+                            <li>❓ Is knowledge shared across the entire ecosystem?</li>
+                            <li>❓ Are boundaries and handoffs explicit?</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="final-message">
+                    The blindspot isn't about missing a fairness check or a privacy feature—it's about designing isolated systems when you need to design responsibility infrastructure for entire ecosystems.
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="usecases-content" style="display: none;">
+            <div class="intro-section">
+                <h2>Design Challenge</h2>
+                <p class="page-description">Using the blueprint, work with teams across healthcare are to identify and address responsibility gaps.</p>
+            </div>
+            
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏥</div>
+                    <h3 class="use-case-title">Hospital System Integration</h3>
+                    <p class="use-case-description">A major health system used the blueprint to map their AI-powered patient deterioration detection system. They discovered a critical gap: alerts sent during shift changes were going unacknowledged for up to 2 hours. The team redesigned their handoff protocol and added shift-aware alert routing.</p>
+                    <div class="use-case-outcome">
+                        <strong>Outcome:</strong> 87% reduction in missed alerts during transitions
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-icon">🔬</div>
+                    <h3 class="use-case-title">Clinical Decision Support</h3>
+                    <p class="use-case-description">A radiology AI startup mapped their diagnostic recommendation workflow. The blueprint revealed that radiologists didn't know the model's confidence scores varied by patient demographics. They added transparent performance metrics stratified by patient characteristics.</p>
+                    <div class="use-case-outcome">
+                        <strong>Outcome:</strong> Increased clinician trust and 40% reduction in unnecessary overrides
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-icon">💊</div>
+                    <h3 class="use-case-title">Medication Management</h3>
+                    <p class="use-case-description">A pharmacy tech company discovered through blueprint mapping that their drug interaction alert system had conflicting responsibilities with the hospital's existing system. Patients were receiving duplicate alerts, leading to alert fatigue. They coordinated with EHR vendors to consolidate alerting.</p>
+                    <div class="use-case-outcome">
+                        <strong>Outcome:</strong> 60% reduction in duplicate alerts, improved pharmacist response time
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-icon">🧬</div>
+                    <h3 class="use-case-title">Genomic Testing</h3>
+                    <p class="use-case-description">A precision medicine platform mapped their patient consent and data usage journey. The blueprint exposed that patients weren't aware their genomic data would be shared with research partners. They redesigned consent forms and added ongoing data usage transparency.</p>
+                    <div class="use-case-outcome">
+                        <strong>Outcome:</strong> 95% patient satisfaction with data transparency, zero consent-related complaints
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-icon">🩺</div>
+                    <h3 class="use-case-title">Remote Patient Monitoring</h3>
+                    <p class="use-case-description">A telehealth company used the blueprint to map their continuous glucose monitoring system. They found that when algorithm updates were deployed, nurses weren't notified of changes in alert thresholds, leading to confusion about clinical decision-making.</p>
+                    <div class="use-case-outcome">
+                        <strong>Outcome:</strong> Implemented change notification system and clinical decision support updates
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏃</div>
+                    <h3 class="use-case-title">Preventive Care</h3>
+                    <p class="use-case-description">A wellness app with AI-powered health risk predictions mapped their user journey. The blueprint revealed users didn't understand how their personal data influenced predictions, creating mistrust. They added explainable AI features and data lineage visualization.</p>
+                    <div class="use-case-outcome">
+                        <strong>Outcome:</strong> 3x increase in user engagement with preventive recommendations
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const introductionContent = document.getElementById('introduction-content');
+        const frameworkContent = document.getElementById('framework-content');
+        const blindspotsContent = document.getElementById('blindspots-content');
+        const designContent = document.getElementById('design-content');
+        const usecasesContent = document.getElementById('usecases-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.getAttribute('data-tab');
+                
+                // Remove active class from all buttons
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show/hide content
+                introductionContent.style.display = 'none';
+                frameworkContent.style.display = 'none';
+                blindspotsContent.style.display = 'none';
+                designContent.style.display = 'none';
+                usecasesContent.style.display = 'none';
+                
+                if (tab === 'introduction') {
+                    introductionContent.style.display = 'block';
+                } else if (tab === 'framework') {
+                    frameworkContent.style.display = 'block';
+                } else if (tab === 'blindspots') {
+                    blindspotsContent.style.display = 'block';
+                } else if (tab === 'design') {
+                    designContent.style.display = 'block';
+                } else if (tab === 'usecases') {
+                    usecasesContent.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

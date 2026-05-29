@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsible AI Ecosystem Blueprint | Service Design for Healthcare UX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Fraunces:wght@300;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a1628;
+            --accent: #ff6b35;
+            --accent-light: #ff8c61;
+            --text: #2d3748;
+            --text-light: #718096;
+            --bg: #fafafa;
+            --bg-alt: #f7f9fc;
+            --blue: #2563eb;
+            --blue-light: #60a5fa;
+            --yellow: #fbbf24;
+            --red: #ef4444;
+            --grid: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2942 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                );
+            background-size: 100px 100px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 300;
+            max-width: 700px;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.9; }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Why Section */
+        .why-section {
+            padding: 6rem 2rem;
+            background: white;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: var(--bg-alt);
+            border-left: 4px solid var(--accent);
+            padding: 2rem;
+            margin: 2rem 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Blueprint Structure */
+        .blueprint-section {
+            padding: 6rem 2rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        .blueprint-layers {
+            display: grid;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .layer {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--blue-light);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .layer:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+        }
+
+        .layer.responsibility {
+            border-left-color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .layer h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .layer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Stages Section */
+        .stages-section {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .stages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stage-card {
+            background: var(--bg-alt);
+            padding: 2rem;
+            border-top: 4px solid var(--blue);
+            transition: all 0.3s ease;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .stage-number {
+            font-family: 'Fraunces', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--blue-light);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .stage-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .stage-description {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-light);
+        }
+
+        /* Symbols Section */
+        .symbols-section {
+            padding: 6rem 2rem;
+            background: var(--bg);
+        }
+
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .symbol-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .symbol-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .symbol-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .symbol-text h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .symbol-text p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* How to Use */
+        .how-to-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+            color: white;
+        }
+
+        .workshop-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .step-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            color: var(--yellow);
+        }
+
+        .step-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-items {
+            list-style: none;
+        }
+
+        .step-items li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .step-items li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--yellow);
+        }
+
+        /* Advantages */
+        .advantages-section {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .comparison-card {
+            background: var(--bg-alt);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .comparison-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .comparison-items {
+            list-style: none;
+        }
+
+        .comparison-items li {
+            padding: 0.75rem 0 0.75rem 2rem;
+            position: relative;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+        }
+
+        .comparison-items li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-items li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        /* Use Cases Section */
+        .use-cases-section {
+            padding: 6rem 2rem;
+            background: var(--bg);
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .use-case-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--blue);
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .use-case-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .use-case-description {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-outcome {
+            padding: 1rem;
+            background: var(--bg-alt);
+            border-left: 3px solid var(--accent);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .use-case-outcome strong {
+            color: var(--accent);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .about-content {
+            max-width: 1000px;
+            margin: 2rem auto 0;
+        }
+
+        .about-text {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        /* Download Section */
+        .download-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5aa0 100%);
+            color: white;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .download-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .download-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        .cta-section .cta-buttons {
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: #0a0e1a;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .stages-grid,
+            .workshop-steps,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-light);
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .nav-cta:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-links.mobile-open {
+            display: flex;
+        }
+
+        /* Adjust hero for top nav */
+        .hero {
+            margin-top: 0;
+        }
+
+        @media (max-width: 968px) {
+            .top-nav-content {
+                flex-wrap: wrap;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                padding-top: 1rem;
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+            }
+
+            .nav-link, .nav-cta {
+                text-align: center;
+            }
+
+            .nav-cta {
+                display: block;
+            }
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nav-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            padding: 0.25rem 0;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-link.active {
+            color: white;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-link:hover .nav-dot {
+            background: var(--accent);
+            transform: scale(1.5);
+        }
+
+        .nav-link.active .nav-dot {
+            background: var(--accent);
+            width: 12px;
+            height: 12px;
+        }
+
+        .nav-label {
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            max-width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-nav:hover .nav-label {
+            opacity: 1;
+            transform: translateX(0);
+            max-width: 200px;
+        }
+
+        /* Mobile sidebar toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
+        }
+
+        .sidebar-toggle.active {
+            background: var(--primary);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .sidebar-nav {
+                right: 1rem;
+            }
+
+            .nav-label {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-nav {
+                right: 1rem;
+                bottom: 5rem;
+                top: auto;
+                transform: translateY(0);
+                padding: 1rem 0.75rem;
+            }
+
+            .sidebar-nav.mobile-hidden {
+                transform: translateX(150%);
+            }
+
+            .nav-label {
+                opacity: 1;
+                transform: translateX(0);
+                max-width: 200px;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav" id="topNav">
+        <div class="top-nav-content">
+            <a href="#hero" class="nav-logo">RAI Service Blueprint</a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="explore.html" class="nav-link">Explore</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#download" class="nav-cta">Download Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav" id="sidebarNav">
+        <ul class="nav-items">
+            <li class="nav-item">
+                <a href="#hero" class="nav-link active" data-section="hero">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">HOME</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#why" class="nav-link" data-section="why">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">WHY THIS FORMAT</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#blueprint" class="nav-link" data-section="blueprint">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">BLUEPRINT</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#stages" class="nav-link" data-section="stages">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">STAGES</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#symbols" class="nav-link" data-section="symbols">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">SYMBOLS</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#how-to" class="nav-link" data-section="how-to">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">HOW TO USE</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#advantages" class="nav-link" data-section="advantages">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">ADVANTAGES</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#cta" class="nav-link" data-section="cta">
+                    <span class="nav-dot"></span>
+                    <span class="nav-label">GET STARTED</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Mobile Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+        ☰
+    </button>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-tag">Service Design Blueprint</div>
+            <h1>Responsible AI<br>Ecosystem Blueprint</h1>
+            <p class="hero-subtitle">A service design approach that makes AI responsibility gaps visible—so you can design to close them.</p>
+            <div class="cta-buttons">
+                <a href="https://drive.google.com/file/d/1enfbQFa13wbu0_l3S0rIVSOzQ4lVlT2M/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Download Guide</a>
+                <a href="explore.html" class="btn btn-secondary">Explore Framework</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Section -->
+    <section class="why-section" id="why">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-tag">WHY THIS FORMAT?</div>
+                <h2>Built on Familiar Foundations</h2>
+            </div>
+            <div class="highlight-box fade-in">
+                Service blueprints already map actors, touchpoints, and handoffs—exactly what we need for responsibility mapping. This adapted format adds responsibility layers to the familiar blueprint structure.
+            </div>
+            <div class="highlight-box fade-in">
+                <strong>Time:</strong> 45-60 minutes initial mapping | 20 minutes for updates<br>
+                <strong>Materials:</strong> Large whiteboard/Miro board, sticky notes, markers<br>
+                <strong>Participants:</strong> Designer, PM, clinical SME, legal/compliance (optional but recommended)
+            </div>
+        </div>
+    </section>
+
+    <!-- Blueprint Structure -->
+    <section class="blueprint-section" id="blueprint">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">THE FRAMEWORK</div>
+                <h2 style="color: white;">Blueprint Structure</h2>
+                <p style="opacity: 0.8; max-width: 700px; margin: 0 auto;">5 Swim Lanes + Responsibility Layer</p>
+            </div>
+            <div class="blueprint-layers">
+                <div class="layer fade-in">
+                    <h3>Patient Actions</h3>
+                    <p>What patients do throughout their journey</p>
+                </div>
+                <div class="layer fade-in">
+                    <h3>Provider Actions</h3>
+                    <p>What clinicians and staff do</p>
+                </div>
+                <div class="layer fade-in">
+                    <h3>Frontstage (Visible)</h3>
+                    <p>Patient/provider-facing interfaces</p>
+                </div>
+                <div class="layer fade-in">
+                    <h3>Backstage (Invisible)</h3>
+                    <p>AI algorithms, data processing, APIs</p>
+                </div>
+                <div class="layer fade-in">
+                    <h3>Support Systems</h3>
+                    <p>Infrastructure, third parties, data</p>
+                </div>
+                <div class="layer responsibility fade-in">
+                    <h3>⚡ Responsibility Layer</h3>
+                    <p>Who is accountable? For what? What conflicts exist?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stages Section -->
+    <section class="stages-section" id="stages">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-tag">EXAMPLE USE CASE</div>
+                <h2>AI-Powered Sepsis Early Warning System</h2>
+                <p style="color: var(--text-light); max-width: 700px; margin: 0 auto;">Five critical stages where responsibility gaps emerge</p>
+            </div>
+            <div class="stages-grid">
+                <div class="stage-card fade-in">
+                    <div class="stage-number">01</div>
+                    <div class="stage-title">Patient Enrollment & Setup</div>
+                    <p class="stage-description">Sensors placed, monitoring activated, baseline data collected. Gap: Who ensures patients understand data usage for research?</p>
+                </div>
+                <div class="stage-card fade-in">
+                    <div class="stage-number">02</div>
+                    <div class="stage-title">Continuous Monitoring</div>
+                    <p class="stage-description">AI recalculates risk every 5 minutes. Conflict: Algorithm optimized for sensitivity vs. nurses experiencing alert fatigue.</p>
+                </div>
+                <div class="stage-card fade-in">
+                    <div class="stage-number">03</div>
+                    <div class="stage-title">High-Risk Alert 🚨</div>
+                    <p class="stage-description">Critical handoff point. Gap: Alert sent at 3:15am during understaffed shift—who's accountable for the 90-minute delay?</p>
+                </div>
+                <div class="stage-card fade-in">
+                    <div class="stage-number">04</div>
+                    <div class="stage-title">Clinical Response</div>
+                    <p class="stage-description">Physician overrides AI recommendation. Conflict: If patient worsens, who's accountable—physician or AI?</p>
+                </div>
+                <div class="stage-card fade-in">
+                    <div class="stage-number">05</div>
+                    <div class="stage-title">Post-Discharge Data Use</div>
+                    <p class="stage-description">Data anonymized and sold to research consortium. Massive gap: Patient never knew data would be monetized.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Symbols Reference -->
+    <section class="symbols-section" id="symbols">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-tag">QUICK REFERENCE</div>
+                <h2>Blueprint Symbols</h2>
+            </div>
+            <div class="symbols-grid">
+                <div class="symbol-card fade-in">
+                    <div class="symbol-icon">🔗</div>
+                    <div class="symbol-text">
+                        <h4>Critical Handoff</h4>
+                        <p>High risk for responsibility gap</p>
+                    </div>
+                </div>
+                <div class="symbol-card fade-in">
+                    <div class="symbol-icon">🔴</div>
+                    <div class="symbol-text">
+                        <h4>Responsibility Gap</h4>
+                        <p>No clear owner</p>
+                    </div>
+                </div>
+                <div class="symbol-card fade-in">
+                    <div class="symbol-icon">⚠️</div>
+                    <div class="symbol-text">
+                        <h4>Conflict</h4>
+                        <p>Actors' responsibilities undermine each other</p>
+                    </div>
+                </div>
+                <div class="symbol-card fade-in">
+                    <div class="symbol-icon">📊</div>
+                    <div class="symbol-text">
+                        <h4>Knowledge Gap</h4>
+                        <p>Actor lacks info needed to fulfill responsibility</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use -->
+    <section class="how-to-section" id="how-to">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag" style="color: var(--yellow);">WORKSHOP FORMAT</div>
+                <h2 style="color: white;">60-Minute Blueprint Session</h2>
+            </div>
+            <div class="workshop-steps">
+                <div class="step-card fade-in">
+                    <div class="step-label">15 MIN</div>
+                    <div class="step-title">Preparation</div>
+                    <ul class="step-items">
+                        <li>Print 6-layer swim lane structure</li>
+                        <li>Gather colored sticky notes</li>
+                        <li>Blue = actions/touchpoints</li>
+                        <li>Yellow = systems/infrastructure</li>
+                        <li>Red = gaps/conflicts</li>
+                        <li>Green = knowledge needs</li>
+                    </ul>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-label">30 MIN</div>
+                    <div class="step-title">Mapping</div>
+                    <ul class="step-items">
+                        <li>Map patient & provider journey</li>
+                        <li>Add frontstage interfaces</li>
+                        <li>Map backstage AI processes</li>
+                        <li>Add support systems</li>
+                        <li>Draw handoff connections</li>
+                    </ul>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-label">15 MIN</div>
+                    <div class="step-title">Analysis</div>
+                    <ul class="step-items">
+                        <li>Ask: "Who's accountable if this fails?"</li>
+                        <li>Mark gaps, conflicts, knowledge needs</li>
+                        <li>Identify 3 highest-risk areas</li>
+                        <li>Plan design interventions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages -->
+    <section class="advantages-section" id="advantages">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-tag">WHY IT WORKS</div>
+                <h2>Key Advantages</h2>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card fade-in">
+                    <div class="comparison-title">vs. Traditional Responsibility Matrix</div>
+                    <ul class="comparison-items">
+                        <li>Shows responsibility over time (journey stages)</li>
+                        <li>Makes handoffs visible (highest-risk zones)</li>
+                        <li>Separates visible from invisible (where knowledge gaps hide)</li>
+                        <li>Familiar format for designers (easy adoption)</li>
+                    </ul>
+                </div>
+                <div class="comparison-card fade-in">
+                    <div class="comparison-title">vs. Stakeholder Map</div>
+                    <ul class="comparison-items">
+                        <li>Shows when each actor is involved, not just that they exist</li>
+                        <li>Reveals sequential dependencies in responsibilities</li>
+                        <li>Makes backstage/support systems explicit</li>
+                        <li>Identifies critical handoff points</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-tag">BACKGROUND</div>
+                <h2>About This Framework</h2>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem;">Why We Built This</h3>
+                    <p style="margin-bottom: 1rem; line-height: 1.8;">AI systems in healthcare are incredibly complex ecosystems involving patients, providers, algorithms, devices, cloud infrastructure, EHR systems, insurance companies, and research partners. When something goes wrong, responsibility often falls through the cracks—everyone blames someone else, and patients suffer.</p>
+                    
+                    <p style="margin-bottom: 1rem; line-height: 1.8;">Traditional responsibility matrices and stakeholder maps don't capture the temporal, sequential nature of AI-powered healthcare journeys. We needed a tool that could:</p>
+                    
+                    <ul style="list-style: none; padding-left: 0; margin-bottom: 2rem;">
+                        <li style="padding: 0.5rem 0; padding-left: 2rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">→</span>
+                            Show responsibility over time, not just static organizational charts
+                        </li>
+                        <li style="padding: 0.5rem 0; padding-left: 2rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">→</span>
+                            Make visible what happens "backstage" in AI systems
+                        </li>
+                        <li style="padding: 0.5rem 0; padding-left: 2rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">→</span>
+                            Identify handoff points where responsibility gaps emerge
+                        </li>
+                        <li style="padding: 0.5rem 0; padding-left: 2rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">→</span>
+                            Use a format already familiar to UX designers
+                        </li>
+                    </ul>
+
+                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem; margin-top: 2rem;">Research Foundation</h3>
+                    <p style="margin-bottom: 1rem; line-height: 1.8;">This blueprint adapts service design methodology for AI responsibility mapping. It's based on research published in AI and Ethics on embedding responsibility in intelligent systems, which argues that responsibility must be designed into the ecosystem from the start—not retrofitted after incidents occur.</p>
+                    
+                    <p style="margin-bottom: 2rem; line-height: 1.8;">The framework has been tested with healthcare UX teams, clinical informatics departments, and AI product teams across hospital systems, medical device companies, and health tech startups.</p>
+
+                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem;">Who This Is For</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                        <div style="padding: 1.5rem; background: var(--bg-alt); border-left: 4px solid var(--blue);">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--primary);">UX Designers</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Designing AI-powered healthcare products and need to map responsibility across the user journey</p>
+                        </div>
+                        <div style="padding: 1.5rem; background: var(--bg-alt); border-left: 4px solid var(--blue);">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--primary);">Product Managers</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Managing AI products and need to identify risk areas before launch</p>
+                        </div>
+                        <div style="padding: 1.5rem; background: var(--bg-alt); border-left: 4px solid var(--blue);">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--primary);">Clinical Informaticists</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Implementing AI systems in hospitals and need to ensure safe integration</p>
+                        </div>
+                        <div style="padding: 1.5rem; background: var(--bg-alt); border-left: 4px solid var(--blue);">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--primary);">Compliance Teams</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Ensuring AI systems meet regulatory requirements and ethical standards</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-team fade-in" style="margin-top: 3rem; padding: 2rem; background: var(--bg-alt); border-radius: 8px;">
+                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem;">Credits</h3>
+                    <p style="line-height: 1.8; margin-bottom: 1rem;">Built with ❤️ for <a href="https://opencivic.tech" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent);">opencivic.tech</a> by <strong>Femmecubator</strong></p>
+                    <p style="font-size: 0.9rem; color: var(--text-light); line-height: 1.7;">Based on the study: <a href="https://link.springer.com/article/10.1007/s43681-023-00307-2" target="_blank" rel="noopener noreferrer" style="color: var(--blue); text-decoration: none; border-bottom: 1px dotted var(--blue);">Embedding responsibility in intelligent systems: from AI ethics to responsible AI ecosystems</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section" id="download">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag" style="color: var(--yellow);">GET THE RESOURCES</div>
+                <h2 style="color: white;">Download Guide & Templates</h2>
+                <p style="opacity: 0.9; max-width: 700px; margin: 1rem auto 0;">Everything you need to run your first blueprint workshop</p>
+            </div>
+            
+            <div class="download-grid">
+                <div class="download-card fade-in">
+                    <div class="download-icon">📄</div>
+                    <h3>Complete PDF Guide</h3>
+                    <p>Full blueprint methodology with the AI-Powered Sepsis Early Warning System case study, symbol reference, and detailed examples.</p>
+                    <a href="#" class="download-btn">Download PDF</a>
+                </div>
+
+                <div class="download-card fade-in">
+                    <div class="download-icon">👥</div>
+                    <h3>Workshop Facilitator Guide</h3>
+                    <p>Step-by-step instructions for running 60-minute blueprint workshops, including prep checklists and troubleshooting tips.</p>
+                    <a href="#" class="download-btn">Download Word Doc</a>
+                </div>
+
+                <div class="download-card fade-in">
+                    <div class="download-icon">🎨</div>
+                    <h3>Figjam Template</h3>
+                    <p>Ready-to-use digital template with pre-formatted swim lanes, color-coded sticky notes, and symbol library.</p>
+                    <a href="#" class="download-btn">Get Template</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2>Ready to Map Your AI System?</h2>
+            <p>The blueprint isn't about documenting perfect responsibility—it's about making responsibility gaps visible so you can design to close them.</p>
+            <div class="cta-buttons">
+                <a href="#download" class="btn btn-primary">Get Started</a>
+                <a href="explore.html" class="btn btn-secondary">Explore Framework</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Responsible AI Ecosystem Blueprint • Service Design for Healthcare UX</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">A framework for identifying and addressing responsibility gaps in AI-powered healthcare systems</p>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem;">Based on the study: <a href="https://link.springer.com/article/10.1007/s43681-023-00307-2" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); transition: opacity 0.3s ease;">Embedding responsibility in intelligent systems: from AI ethics to responsible AI ecosystems</a></p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">Built with ❤️ for <a href="https://opencivic.tech" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none; transition: opacity 0.3s ease;">opencivic.tech</a> by <a href="#" style="color: var(--accent); text-decoration: none; transition: opacity 0.3s ease;">Femmecubator</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Top navigation scroll effect
+        const topNav = document.getElementById('topNav');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link, .nav-cta').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-open');
+            });
+        });
+
+        // Sidebar navigation active state tracking
+        const sections = document.querySelectorAll('section[id]');
+        const sidebarNavLinks = document.querySelectorAll('.nav-link[data-section]');
+        const sidebarNav = document.getElementById('sidebarNav');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        // Track active section on scroll
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    
+                    // Remove active class from all links
+                    sidebarNavLinks.forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    
+                    // Add active class to current section link
+                    const activeLink = document.querySelector(`.nav-link[data-section="${id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '-100px 0px -50% 0px'
+        });
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80; // Account for fixed top nav
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile sidebar after clicking
+                    if (window.innerWidth <= 768) {
+                        sidebarNav.classList.add('mobile-hidden');
+                        sidebarToggle.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Mobile sidebar toggle
+        sidebarToggle.addEventListener('click', () => {
+            sidebarNav.classList.toggle('mobile-hidden');
+            sidebarToggle.classList.toggle('active');
+        });
+
+        // Hide sidebar on hero section (optional)
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (window.innerWidth > 768) {
+                    if (entry.isIntersecting) {
+                        sidebarNav.classList.add('hidden');
+                    } else {
+                        sidebarNav.classList.remove('hidden');
+                    }
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        const heroSection = document.getElementById('hero');
+        if (heroSection) {
+            heroObserver.observe(heroSection);
+        }
+
+        // Initialize mobile sidebar as hidden
+        if (window.innerWidth <= 768) {
+            sidebarNav.classList.add('mobile-hidden');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebarNav.classList.remove('mobile-hidden');
+                navLinks.classList.remove('mobile-open');
+            } else {
+                sidebarNav.classList.add('mobile-hidden');
+            }
+        });
+    </script>
+</body>
+</html>

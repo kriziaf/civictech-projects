@@ -1,0 +1,623 @@
+<!-- v2.3.2 | 2026-02-18 | Updated 311-chat and RAI-workshop hrefs to /project/ pattern -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@civictechie — Open Source Civic Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f0e0e;
+            --paper: #f5f0e8;
+            --accent: #e84c3d;
+            --muted: #8c8070;
+            --card: #faf7f2;
+            --border: #d9d0bf;
+            --tag-1: #1a3a4a;
+            --tag-2: #2d5a3d;
+            --tag-3: #4a1a3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ── Noise overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.4;
+        }
+
+        /* ── Layout ── */
+        .page {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 60px 36px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .sidebar::after {
+            content: 'CIVIC\ATECHIE';
+            position: absolute;
+            bottom: -30px;
+            right: -20px;
+            font-family: 'DM Serif Display', serif;
+            font-size: 9em;
+            color: rgba(245,240,232,0.04);
+            line-height: 0.85;
+            pointer-events: none;
+            white-space: pre;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4em;
+            margin-bottom: 32px;
+            flex-shrink: 0;
+        }
+
+        .handle {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.85em;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .sidebar-bio {
+            font-size: 0.9em;
+            color: rgba(245,240,232,0.65);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .location-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75em;
+            color: rgba(245,240,232,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+        }
+
+        .location-value {
+            font-size: 0.9em;
+            color: rgba(245,240,232,0.7);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            font-size: 0.75em;
+            color: rgba(245,240,232,0.3);
+            font-family: 'DM Mono', monospace;
+            line-height: 1.8;
+        }
+
+        /* ── Main Content ── */
+        .main {
+            padding: 60px 56px;
+            max-width: 860px;
+        }
+
+        .page-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75em;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3.8em;
+            line-height: 1.05;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .page-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .page-subtitle {
+            font-size: 1.05em;
+            color: var(--muted);
+            margin-bottom: 60px;
+            font-weight: 300;
+        }
+
+        /* ── Tabs ── */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 28px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            background: none;
+            border: none;
+            padding: 10px 22px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
+        }
+
+        .tab-btn:hover { color: var(--ink); }
+
+        .tab-btn.active {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .tab-btn.active::after {
+            transform: scaleX(1);
+        }
+
+        /* ── Project Cards ── */
+        .projects {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .project-card.hidden {
+            display: none;
+        }
+
+        .project-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 36px 40px;
+            position: relative;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            overflow: hidden;
+        }
+
+        .project-card:first-child { border-radius: 12px 12px 0 0; }
+        .project-card:last-child  { border-radius: 0 0 12px 12px; }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.25s ease;
+            transform-origin: bottom;
+        }
+
+        .project-card:hover {
+            transform: translateX(6px);
+            border-color: var(--accent);
+            z-index: 1;
+        }
+
+        .project-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .card-number {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72em;
+            color: var(--muted);
+            margin-bottom: 12px;
+            letter-spacing: 0.06em;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .card-emoji {
+            font-size: 1.6em;
+            line-height: 1;
+        }
+
+        .card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5em;
+            color: var(--ink);
+            transition: color 0.2s;
+        }
+
+        .project-card:hover .card-title {
+            color: var(--accent);
+        }
+
+        .card-desc {
+            font-size: 0.92em;
+            color: #5a5248;
+            line-height: 1.7;
+            margin-bottom: 22px;
+            font-weight: 300;
+            max-width: 580px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7em;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 3px;
+            color: var(--paper);
+        }
+
+        .tag.t1 { background: var(--tag-1); }
+        .tag.t2 { background: var(--tag-2); }
+        .tag.t3 { background: var(--tag-3); }
+        .tag.t4 { background: #3a3020; }
+
+        .card-arrow {
+            position: absolute;
+            right: 36px;
+            top: 50%;
+            transform: translateY(-50%) translateX(8px);
+            font-size: 1.4em;
+            opacity: 0;
+            transition: all 0.25s ease;
+            color: var(--accent);
+        }
+
+        .project-card:hover .card-arrow {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* ── Footer ── */
+        .page-footer {
+            margin-top: 60px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+            font-size: 0.82em;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-footer strong {
+            color: var(--ink);
+        }
+
+        /* sidebar-text-group only active on mobile — desktop uses normal flow */
+        .sidebar-text-group { display: contents; }
+        .sidebar-location-pill { display: none; }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .sidebar { animation: fadeUp 0.5s ease both; }
+        .main     { animation: fadeUp 0.5s 0.1s ease both; }
+
+        .project-card:nth-child(1) { animation: fadeUp 0.4s 0.2s ease both; }
+        .project-card:nth-child(2) { animation: fadeUp 0.4s 0.3s ease both; }
+        .project-card:nth-child(3) { animation: fadeUp 0.4s 0.4s ease both; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                height: auto;
+                padding: 28px 32px;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .sidebar::after { display: none; }
+
+            .avatar {
+                width: 56px;
+                height: 56px;
+                font-size: 1.5em;
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+
+            .sidebar-text-group {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                flex: 1;
+                min-width: 0;
+            }
+            .sidebar-location-pill {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 0.78em;
+                color: rgba(245,240,232,0.5);
+                font-family: 'DM Mono', monospace;
+            }
+
+            .handle { margin-bottom: 0; font-size: 0.78em; }
+
+            .sidebar-name {
+                font-size: 1.2em;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .sidebar-bio,
+            .divider,
+            .location-label,
+            .location-value,
+            .sidebar-footer { display: none; }
+
+            .main { padding: 36px 24px; }
+            .page-title { font-size: 2.6em; }
+        }
+
+        @media (max-width: 560px) {
+            .sidebar { padding: 20px 20px; gap: 14px; }
+            .sidebar-name { font-size: 1.05em; }
+            .project-card { padding: 20px; }
+            .card-arrow { display: none; }
+            .main { padding: 28px 16px; }
+            .page-title { font-size: 2em; }
+            .page-subtitle { font-size: 0.95em; margin-bottom: 36px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <!-- Profile Card (Left Aside) -->
+    <aside class="sidebar">
+        <div class="avatar">👩‍💻</div>
+        <div class="sidebar-text-group">
+            <div class="handle">@civictechie</div>
+            <div class="sidebar-name">Open Source<br>Builder</div>
+            <div class="sidebar-location-pill">📍 New York City</div>
+        </div>
+        <p class="sidebar-bio">Hi, I build open source apps. I love pizza and code.</p>
+        <div class="divider"></div>
+        <div class="location-label">Location</div>
+        <div class="location-value">📍 New York City</div>
+        <div class="sidebar-footer">
+            opencivic.tech<br>
+            Femmecubator<br>
+            &copy; 2025
+        </div>
+    </aside>
+
+    <!-- Projects Section (Right Main Content) -->
+    <main class="main">
+        <div class="page-label">Portfolio / Open Source</div>
+        <h1 class="page-title">Civic Tech<br><em>Projects</em></h1>
+        <p class="page-subtitle">Built by Femmecubator CTC Fellows</p>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="filterTab('all', this)">All</button>
+            <button class="tab-btn" onclick="filterTab('hackathon', this)">Hackathon</button>
+            <button class="tab-btn" onclick="filterTab('tools', this)">Tools</button>
+            <button class="tab-btn" onclick="filterTab('workshops', this)">Workshops</button>
+        </nav>
+
+        <div class="projects">
+            <!-- Project 1: The Bridge Bot -->
+            <a href="https://bridge-app-dev.netlify.app/" class="project-card" data-tab="hackathon">
+                <div class="card-number">01 — AI &amp; Accessibility</div>
+                <div class="card-header">
+                    <span class="card-emoji">🌉</span>
+                    <h2 class="card-title">The Bridge Bot Project</h2>
+                </div>
+                <p class="card-desc">This project is a chat AI assistant for families of kids with Autism. The bot helps bridge communication gaps, provides resources, and offers support for parents and caregivers navigating the journey.</p>
+                <div class="tags">
+                    <span class="tag t1">AI Assistant</span>
+                    <span class="tag t3">Healthcare</span>
+                    <span class="tag t2">Accessibility</span>
+                </div>
+                <span class="card-arrow">→</span>
+            </a>
+
+            <!-- Project 2: Equitable Mapping -->
+            <a href="https://civictechcamp2025.devpost.com/" class="project-card" data-tab="hackathon">
+                <div class="card-number">02 — Mapping &amp; Equity</div>
+                <div class="card-header">
+                    <span class="card-emoji">🗺️</span>
+                    <h2 class="card-title">Equitable Mapping Design Challenge</h2>
+                </div>
+                <p class="card-desc">A full day hackathon by 2025 Cohort Fellows for Civic Tech Camp. Submitted proposals were posted on this collaborative platform where teams worked to address mapping inequality and improve geographic data representation in underserved communities.</p>
+                <div class="tags">
+                    <span class="tag t4">Hackathon</span>
+                    <span class="tag t2">Mapping</span>
+                    <span class="tag t3">Equity</span>
+                </div>
+                <span class="card-arrow">→</span>
+            </a>
+
+            <!-- Project 3: NYC 311 -->
+            <a href="/project/311-chat/index.html" class="project-card" data-tab="workshops">
+                <div class="card-number">03 — Civic Services</div>
+                <div class="card-header">
+                    <span class="card-emoji">🗽</span>
+                    <h2 class="card-title">NYC 311 Chat Assistant</h2>
+                </div>
+                <p class="card-desc">Project Brief created for the educational chatbot building workshop. A comprehensive implementation plan for an AI-powered chat assistant to help NYC residents report non-emergency issues, access city services, and get information 24/7.</p>
+                <div class="tags">
+                    <span class="tag t1">Chatbot</span>
+                    <span class="tag t2">Civic Services</span>
+                    <span class="tag t2">NYC</span>
+                </div>
+                <span class="card-arrow">→</span>
+            </a>
+
+            <!-- Project 4: RAI Blueprint -->
+            <a href="/project/RAI-workshop/index.html" class="project-card" data-tab="tools">
+                <div class="card-number">04 — Responsible AI Toolkit</div>
+                <div class="card-header">
+                    <span class="card-emoji">🧭</span>
+                    <h2 class="card-title">RAI Blueprint</h2>
+                </div>
+                <p class="card-desc">A service design framework for identifying and closing responsibility gaps in AI-powered healthcare systems. Combines swim-lane blueprinting with an responsible AI ecosystem model to make ethical risk visible — complete with a facilitator guide, FigJam template, and a real-world sepsis early warning case study.</p>
+                <div class="tags">
+                    <span class="tag t1">Responsible AI</span>
+                    <span class="tag t3">Healthcare</span>
+                    <span class="tag t2">Service Design</span>
+                    <span class="tag t4">Framework</span>
+                </div>
+                <span class="card-arrow">→</span>
+            </a>
+
+            <!-- Project 5: User Journey Mapping by NNG -->
+            <a href="/project/journey-map-canvas/index.html" class="project-card" data-tab="tools">
+                <div class="card-number">05 — User Research Toolkit</div>
+                <div class="card-header">
+                    <span class="card-emoji">🗺️</span>
+                    <h2 class="card-title">User Journey Mapping by NNG</h2>
+                </div>
+                <p class="card-desc">An interactive user journey map tool built on the Nielsen Norman Group methodology. Follows persona "Emotional Eric" through five stages — Consider, Explore, Compare, Test, and Negotiate — capturing step-by-step actions, emotional states, verbatim quotes, pain points, and opportunities. Fully editable with inline save, making it a practical workshop artifact for UX teams.</p>
+                <div class="tags">
+                    <span class="tag t1">UX Research</span>
+                    <span class="tag t2">Journey Mapping</span>
+                    <span class="tag t4">NNG</span>
+                    <span class="tag t3">Workshop Tool</span>
+                </div>
+                <span class="card-arrow">→</span>
+            </a>
+
+            <!-- Project 6: Cortex -->
+            <a href="https://github.com/kriziaf/cortex" class="project-card" data-tab="tools">
+                <div class="card-number">06 — Mobile UI</div>
+                <div class="card-header">
+                    <span class="card-emoji">🧠</span>
+                    <h2 class="card-title">Cortex</h2>
+                </div>
+                <p class="card-desc">An open source mobile app UI design for builders who want to create their own recorder. Cortex is a hybrid voice recorder and dictation tool for reading articles — free to use, fork, and build upon.</p>
+                <div class="tags">
+                    <span class="tag t1">Open Source</span>
+                    <span class="tag t2">Mobile UI</span>
+                    <span class="tag t4">Voice</span>
+                    <span class="tag t3">Dictation</span>
+                </div>
+                <span class="card-arrow">→</span>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            <span>Built with ♥ for <strong>opencivic.tech</strong> by <strong>Femmecubator</strong></span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.85em;">6 projects · 2025 · <span style="color:var(--accent);">v2.3.2</span></span>
+        </footer>
+    </main>
+</div>
+<script>
+    function filterTab(tab, btn) {
+        // Update active tab button
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Show/hide cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            if (tab === 'all' || card.dataset.tab === tab) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Fix border-radius for visible cards
+        const visible = [...document.querySelectorAll('.project-card:not(.hidden)')];
+        visible.forEach((card, i) => {
+            card.style.borderRadius = '';
+            if (i === 0 && i === visible.length - 1) card.style.borderRadius = '12px';
+            else if (i === 0) card.style.borderRadius = '12px 12px 0 0';
+            else if (i === visible.length - 1) card.style.borderRadius = '0 0 12px 12px';
+            else card.style.borderRadius = '0';
+        });
+    }
+</script>
+</body>
+</html>

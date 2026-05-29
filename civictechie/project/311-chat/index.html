@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC 311 Chat Assistant - Project Implementation Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            color: white;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            padding: 0 20px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #1e3c72;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #2a5298;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            color: #495057;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #495057;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .code-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+
+        .copy-btn {
+            padding: 6px 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .copy-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #212529;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric-card h4 {
+            color: white;
+            margin: 0 0 10px 0;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .metric-card .value {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .badge.success { background: #28a745; }
+        .badge.warning { background: #ffc107; color: #212529; }
+        .badge.danger { background: #dc3545; }
+        .badge.info { background: #17a2b8; }
+
+        .flow-diagram {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .nav-tab {
+                padding: 12px 15px;
+                font-size: 0.85em;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗽 NYC 311 Chat Assistant</h1>
+            <p>An opencivic.tech project by Femmecubator</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-tab" onclick="showSection('usecase')">Use Case</button>
+            <button class="nav-tab" onclick="showSection('entrypoints')">Entry Points</button>
+            <button class="nav-tab" onclick="showSection('intents')">User Intents</button>
+            <button class="nav-tab" onclick="showSection('responses')">Bot Responses</button>
+            <button class="nav-tab" onclick="showSection('happypath')">Happy Path</button>
+            <button class="nav-tab" onclick="showSection('edgecases')">Edge Cases</button>
+            <button class="nav-tab" onclick="showSection('questions')">FAQ</button>
+            <button class="nav-tab" onclick="showSection('resources')">Resources</button>
+        </nav>
+
+        <div class="content">
+            <!-- OVERVIEW SECTION -->
+            <section id="overview" class="section active">
+                <h2>1. Project Brief</h2>
+                
+                <p><strong>Project Name:</strong> NYC 311 AI Chat Assistant</p>
+                
+                <p><strong>Objective:</strong> Develop an intelligent conversational assistant to supplement NYC's 311 service by enabling residents to report non-emergency incidents, request city services, and access information through natural language conversation.</p>
+
+                <h3>Core Functions</h3>
+                <div class="card">
+                    <ul>
+                        <li>Collect and process incident reports (potholes, noise complaints, sanitation issues, etc.)</li>
+                        <li>Provide information about city services and programs</li>
+                        <li>Track existing 311 requests</li>
+                        <li>Route urgent issues appropriately</li>
+                        <li>Offer multilingual support for NYC's diverse population</li>
+                    </ul>
+                </div>
+
+                <h3>Success Metrics</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h4>Call Center Volume</h4>
+                        <div class="value">↓ 30%</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9em;">Target reduction</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Report Completion</h4>
+                        <div class="value">< 3 min</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9em;">Average time</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>User Satisfaction</h4>
+                        <div class="value">85%+</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9em;">Target score</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Languages Supported</h4>
+                        <div class="value">200+</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9em;">Multilingual access</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- USE CASE SECTION -->
+            <section id="usecase" class="section">
+                <h2>2. Use Case</h2>
+
+                <h3>Deployment Platforms</h3>
+                <div class="card">
+                    <ul>
+                        <li><strong>NYC.gov website</strong> - Embedded chat widget on all pages</li>
+                        <li><strong>NYC311 Mobile App</strong> - Native chat interface (iOS/Android)</li>
+                        <li><strong>SMS/Text messaging</strong> - Text-based interaction for accessibility</li>
+                        <li><strong>WhatsApp/Facebook Messenger</strong> - Integration with popular messaging platforms</li>
+                        <li><strong>Voice assistants</strong> - Future integration with Alexa/Google Home</li>
+                    </ul>
+                </div>
+
+                <h3>Primary Users</h3>
+                <ul>
+                    <li>NYC residents reporting local issues</li>
+                    <li>Property owners managing maintenance concerns</li>
+                    <li>Visitors seeking city information</li>
+                    <li>Community advocates tracking neighborhood issues</li>
+                </ul>
+
+                <h3>Value Proposition</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Benefit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>24/7 Availability</strong></td>
+                            <td>Report issues anytime, anywhere</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reduced Wait Times</strong></td>
+                            <td>Instant engagement vs. phone queue</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Guided Reporting</strong></td>
+                            <td>Structured data collection ensures complete reports</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multilingual Access</strong></td>
+                            <td>Support for 200+ languages</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status Tracking</strong></td>
+                            <td>Real-time updates on existing requests</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Accessibility</strong></td>
+                            <td>Multiple channels for users with different needs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- ENTRY POINTS SECTION -->
+            <section id="entrypoints" class="section">
+                <h2>3. Entry Points (User Journey)</h2>
+
+                <h3>Digital Channels</h3>
+                
+                <h4>A. NYC.gov Website</h4>
+                <ul>
+                    <li>Prominent chat icon on bottom right of all pages</li>
+                    <li>Dedicated 311 service page with chat-first interface</li>
+                    <li>Pop-up prompt for users on service-related pages</li>
+                </ul>
+
+                <h4>B. NYC311 Mobile App</h4>
+                <ul>
+                    <li>Home screen button: "Chat with 311"</li>
+                    <li>Context-aware prompts when browsing service categories</li>
+                    <li>Push notifications for existing request updates</li>
+                </ul>
+
+                <h4>C. Social Media</h4>
+                <ul>
+                    <li>Click-to-chat buttons on NYC311 Facebook/Instagram pages</li>
+                    <li>Direct messaging integration on Twitter</li>
+                    <li>QR codes in social media posts</li>
+                </ul>
+
+                <h4>D. SMS</h4>
+                <div class="card">
+                    <p><strong>Text "NYC" to 311311</strong></p>
+                    <p>Promoted on billboards, transit ads, city communications</p>
+                </div>
+
+                <h3>Physical/Printed Materials</h3>
+
+                <h4>QR Code Placements:</h4>
+                <ul>
+                    <li>Bus stop shelters and subway stations</li>
+                    <li>Physical 311 service center materials</li>
+                    <li>Community board notices</li>
+                    <li>Printed on city utility bills</li>
+                    <li>Signage in parks and public spaces</li>
+                </ul>
+
+                <h4>Direct Referrals:</h4>
+                <ul>
+                    <li>311 call center transfers: "Would you like to continue via chat?"</li>
+                    <li>City agency website redirects</li>
+                    <li>Community organization partnerships</li>
+                </ul>
+
+                <h4>Contextual Triggers:</h4>
+                <ul>
+                    <li>Location-based prompts (e.g., near a park: "Report park issues here")</li>
+                    <li>Event-based notifications (e.g., after snowstorms: "Report snow removal issues")</li>
+                </ul>
+            </section>
+
+            <!-- USER INTENTS SECTION -->
+            <section id="intents" class="section">
+                <h2>4. User Intent Examples</h2>
+
+                <h3>Category 1: Incident Reporting (Transactional)</h3>
+                
+                <h4>Sanitation & Streets:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Example User Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "There's a pothole on my street"
+- "Missed trash pickup on my block"
+- "Report illegal dumping"
+- "Broken street light at corner of..."
+- "Need bulk item pickup"</pre>
+                </div>
+
+                <h4>Noise & Quality of Life:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Example User Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "Loud construction at night"
+- "Neighbor's dog won't stop barking"
+- "Report illegal fireworks"
+- "Loud party complaint"</pre>
+                </div>
+
+                <h4>Property & Housing:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Example User Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "Report graffiti on building"
+- "Broken fire hydrant"
+- "Tree fallen in my yard"
+- "Abandoned vehicle on my street"
+- "Report dangerous building conditions"</pre>
+                </div>
+
+                <h3>Category 2: Information & Guidance (Informational)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Example User Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "When is alternate side parking suspended?"
+- "What day is my trash pickup?"
+- "Where's the nearest DMV?"
+- "How do I get a birth certificate?"
+- "What are the noise complaint rules?"
+- "Is my block zoned for street vending?"</pre>
+                </div>
+
+                <h3>Category 3: Request Status (Tracking)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Example User Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "Check status of my 311 complaint"
+- "Where's my service request?"
+- "Was my pothole report completed?"
+- "Update on my noise complaint"</pre>
+                </div>
+
+                <h3>Category 4: Emotional/Support (Empathetic)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Example User Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "I don't feel safe in my building"
+- "My landlord won't fix the heat in winter"
+- "I'm homeless and need help"
+- "I need food assistance urgently"</pre>
+                </div>
+            </section>
+
+            <!-- BOT RESPONSES SECTION -->
+            <section id="responses" class="section">
+                <h2>5. Bot Responses</h2>
+
+                <h3>Response Style Framework</h3>
+
+                <h4>A. Empathetic Tone</h4>
+                <p><em>Used when: User expresses distress, frustration, or urgent need</em></p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Empathetic Response Example</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "There's no heat in my apartment and it's freezing"
+
+Bot: "I understand how uncomfortable and concerning that must be, 
+especially in this cold weather. Let me help you report this right away 
+and connect you with emergency resources. 
+
+This is a serious issue - buildings must maintain heat between October 
+and May. I can:
+1. File an emergency heat complaint with HPD
+2. Provide the tenant helpline number (212-HEAT)
+3. Share information about emergency shelters if needed
+
+Which would be most helpful right now?"</pre>
+                </div>
+
+                <h4>B. Informational Tone</h4>
+                <p><em>Used when: User seeks factual information or guidance</em></p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Informational Response Example</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "When is my recycling picked up?"
+
+Bot: "I can help you find your collection schedule! 
+
+To look this up, I'll need your address or borough. Metal, glass, 
+plastic, and beverage cartons are collected on the same day as your 
+trash, just in separate bins.
+
+What's your address or which borough are you in?"</pre>
+                </div>
+
+                <h4>C. Actionable/Directive Tone</h4>
+                <p><em>Used when: Guiding users through processes or next steps</em></p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Actionable Response Example</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "I want to report a pothole"
+
+Bot: "I'll help you report that pothole right now. To create an 
+effective service request, I need a few details:
+
+📍 **Location** - What's the exact address or nearest intersection?
+📏 **Size** - How large is it? (small/medium/large)
+📸 **Photo** - Can you upload a picture? (optional but helpful)
+
+Let's start with the location - where is this pothole?"</pre>
+                </div>
+
+                <h3>Response Principles</h3>
+                <div class="card">
+                    <ol>
+                        <li><strong>Clarity First:</strong> Use simple language, avoid jargon</li>
+                        <li><strong>Progressive Disclosure:</strong> Don't overwhelm with information</li>
+                        <li><strong>Visual Structure:</strong> Use emojis, line breaks, numbered lists</li>
+                        <li><strong>Confirmation:</strong> Always summarize what was understood/completed</li>
+                        <li><strong>Next Steps:</strong> Always provide clear path forward</li>
+                        <li><strong>Multilingual Sensitivity:</strong> Offer language options proactively</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- HAPPY PATH SECTION -->
+            <section id="happypath" class="section">
+                <h2>6. Happy Path Flow</h2>
+                
+                <h3>Scenario: Resident Reports a Pothole</h3>
+
+                <div class="flow-diagram">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Initiation</div>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-label">Step 1: User initiates report</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">
+                                        <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre>User: "There's a huge pothole on my street"
+
+Bot: "I'll help you report that pothole to the Department of 
+Transportation. They typically respond to pothole complaints within 
+30 days.
+
+To file your report, I need the location. What's the address or 
+nearest cross streets?"</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Information Gathering</div>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-label">Step 2: Collect location details</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">
+                                        <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre>User: "Corner of 5th Ave and 23rd Street"
+
+Bot: "Got it - 5th Avenue and 23rd Street in Manhattan.
+
+How would you describe the size?
+1. Small (less than 2 feet across)
+2. Medium (2-4 feet across)  
+3. Large (more than 4 feet across)
+
+Just send me the number or description."</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Additional Details</div>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-label">Step 3: Gather additional information</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">
+                                        <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre>User: "3 - it's really big"
+
+Bot: "That does sound significant. A few more quick questions:
+
+📸 Do you have a photo you can share? (optional but helps prioritize)
+⚠️ Is it causing an immediate safety hazard - like water main break 
+or exposed utility lines?"</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Contact Information</div>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-label">Step 4: Collect contact details</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">
+                                        <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre>User: "No that's everything"
+
+Bot: "Perfect. To complete your report, I'll need:
+
+📧 Email or 📱 Phone number (to send you updates and your Service 
+Request number)
+
+Which would you prefer?"</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">Confirmation & Submission</div>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-label">Step 5: Submit and confirm</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">
+                                        <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre>User: "john.doe@email.com"
+
+Bot: "✅ Your pothole report has been submitted!
+
+**Service Request #:** SR123456789
+**Location:** 5th Ave & 23rd St, Manhattan
+**Reported:** February 2, 2026 at 2:45 PM
+**Expected Response:** Within 30 days
+
+You'll receive email updates at john.doe@email.com when:
+• Your request is reviewed
+• Work is scheduled  
+• Repairs are completed
+
+You can check status anytime by sharing your SR number with me or 
+visiting nyc.gov/311central
+
+Is there anything else I can help you with today?"</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EDGE CASES SECTION -->
+            <section id="edgecases" class="section">
+                <h2>7. Edge Cases</h2>
+
+                <h3>Edge Case 1: User in Immediate Danger/Emergency</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Emergency Response</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "There's a fire in my building!"
+
+Bot: "🚨 This is an EMERGENCY. 
+
+CALL 911 IMMEDIATELY: 911
+
+I'm a non-emergency service and can't dispatch emergency responders. 
+Please call 911 right now if you haven't already.
+
+Are you in a safe location?"</pre>
+                </div>
+
+                <h3>Edge Case 2: Request Outside Bot Scope</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Out of Scope Redirect</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "Can you pay my parking ticket for me?"
+
+Bot: "I can't directly process parking ticket payments, but I can help 
+you take care of it!
+
+To pay or dispute a parking ticket, you have a few options:
+
+💻 **Online:** nyc.gov/parkingticket
+📱 **By Phone:** 311 
+🏛️ **In Person:** NYC DOF Business Centers
+
+Do you need:
+• The link to pay online?
+• Information about disputing a ticket?
+• Location of nearest payment center?"</pre>
+                </div>
+
+                <h3>Edge Case 3: Ambiguous or Unclear Query</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Clarification Request</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "It's really loud"
+
+Bot: "I can help you with noise complaints. To file the right type of 
+report, can you tell me more about the noise?
+
+Is it:
+1. Construction noise
+2. Neighbor/residential noise (music, parties, etc.)
+3. Commercial establishment (bar, restaurant)
+4. Car alarm or vehicle noise
+5. Something else
+
+Just send the number or describe it in your own words."</pre>
+                </div>
+
+                <h3>Edge Case 4: Angry or Frustrated User</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">De-escalation Response</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "This is ridiculous! I've reported this pothole 5 times and 
+nobody does anything!!!"
+
+Bot: "I can hear your frustration, and you have every right to be 
+concerned - especially if this has been ongoing. Let me look into this 
+for you.
+
+Do you have a Service Request number from any of your previous reports? 
+Or can you share the location so I can check the status?
+
+I want to make sure we escalate this appropriately and get you answers."</pre>
+                </div>
+
+                <h3>Edge Case 5: Language Barrier</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Multilingual Support</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>User: "¿Puedo hablar en español?"
+
+Bot: "¡Por supuesto! Puedo ayudarte en español.
+
+Soy el Asistente 311 de NYC. Puedo ayudarte a:
+• Reportar problemas
+• Obtener información sobre servicios
+• Verificar el estado de solicitudes existentes
+
+¿En qué puedo ayudarte hoy?"</pre>
+                </div>
+
+                <h3>Edge Case 6: System/Technical Error</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Error Recovery</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>Bot: "I apologize - I'm experiencing a technical issue and couldn't 
+submit your report. 
+
+Your information is saved. You can:
+
+📞 Call 311 to complete your report (they can access what we discussed)
+💻 Visit nyc.gov/311 to submit online
+🔄 Try again in a few minutes (I'll remember your details)
+
+Would you like me to text you a reminder to follow up, or would you 
+prefer to call 311 now?"</pre>
+                </div>
+            </section>
+
+            <!-- FAQ SECTION -->
+            <section id="questions" class="section">
+                <h2>8. Anticipated Questions</h2>
+
+                <h3>Category 1: Getting Started</h3>
+                <div class="card">
+                    <ul>
+                        <li>"What can you help me with?"</li>
+                        <li>"How does this work?"</li>
+                        <li>"Do I need an account?"</li>
+                        <li>"Is this secure?"</li>
+                        <li>"Can I remain anonymous?"</li>
+                        <li>"What languages do you speak?"</li>
+                    </ul>
+                </div>
+
+                <h3>Category 2: Report Filing</h3>
+                <h4>Before Filing:</h4>
+                <div class="card">
+                    <ul>
+                        <li>"What counts as a 311 issue?"</li>
+                        <li>"Is this an emergency?"</li>
+                        <li>"Do I need to provide my name?"</li>
+                        <li>"What information do you need from me?"</li>
+                        <li>"Can I upload photos?"</li>
+                    </ul>
+                </div>
+
+                <h4>After Filing:</h4>
+                <div class="card">
+                    <ul>
+                        <li>"What's my service request number?"</li>
+                        <li>"How do I check the status?"</li>
+                        <li>"Can I cancel my request?"</li>
+                        <li>"Why is it taking so long?"</li>
+                        <li>"Can I submit another complaint about the same issue?"</li>
+                    </ul>
+                </div>
+
+                <h3>Category 3: Service-Specific Questions</h3>
+                
+                <h4>Sanitation:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Common Sanitation Questions</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "When is my trash day?"
+- "What can I recycle?"
+- "How do I dispose of [large item]?"
+- "What if my trash wasn't picked up?"
+- "How do I get a new trash bin?"</pre>
+                </div>
+
+                <h4>Housing:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Common Housing Questions</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>- "What are my rights as a tenant?"
+- "How do I report housing code violations?"
+- "My landlord won't make repairs - what can I do?"
+- "How do I find affordable housing?"</pre>
+                </div>
+
+                <h3>Category 4: Escalation & Complaints</h3>
+                <div class="card">
+                    <ul>
+                        <li>"Nothing was done about my complaint"</li>
+                        <li>"I want to speak to a supervisor"</li>
+                        <li>"How do I file a complaint about a city employee?"</li>
+                        <li>"This is urgent - who can I talk to?"</li>
+                        <li>"Can I speak to a real person?"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- RESOURCES SECTION -->
+            <section id="resources" class="section">
+                <h2>9. Helpful Information the Bot Provides</h2>
+
+                <h3>A. Process Guidance</h3>
+                
+                <h4>Response Time Expectations</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Typical Response Times</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>**Typical Response Times:**
+
+⚡ **Immediate/Same Day:**
+• Downed power lines (utility company)
+• Hazardous material spills
+• Water main breaks
+
+🏃 **1-3 Days:**
+• Dead animals in public spaces
+• Traffic signal malfunctions
+• Overflowing catch basins
+
+📅 **5-10 Days:**
+• Streetlight outages
+• Tree limb removal
+• Graffiti removal (public property)
+
+📆 **30 Days:**
+• Potholes
+• Sidewalk repairs
+• Illegal dumping investigations
+• Noise complaints</pre>
+                </div>
+
+                <h3>B. Rights & Regulations</h3>
+
+                <h4>Tenant Rights</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">NYC Tenant Rights</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>"As an NYC tenant, you have important rights:
+
+🏠 **Heat & Hot Water:**
+• Heat required Oct 1 - May 31
+• Minimum 68°F (6am-10pm) when outside temp below 55°F
+• Minimum 62°F (night) when outside temp below 40°F
+• Hot water at 120°F year-round
+
+📞 No heat? Call 311 for emergency HPD complaint
+
+🚫 **Illegal Evictions:**
+• Landlord cannot lock you out
+• Cannot shut off utilities
+• Cannot remove belongings
+• Must go through court process"</pre>
+                </div>
+
+                <h4>Noise Regulations</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">NYC Noise Code</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>"NYC Noise Code Quick Guide:
+
+🔇 **Residential Areas:**
+• Construction: Mon-Fri 7am-6pm only
+• No construction weekends/holidays (except emergency)
+• Music/TV: Cannot be heard from outside your apartment
+• Dogs: Cannot bark for 10+ minutes continuously
+
+🏗️ **Construction Exceptions:**
+• After-hours permits available for some work
+• Emergency repairs allowed 24/7
+
+📱 **To Report:**
+• Call 311 for general noise
+• Call 911 for noise + threat/danger"</pre>
+                </div>
+
+                <h3>C. Resource Directories</h3>
+
+                <h4>Emergency & Crisis Resources</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Emergency Contact Information</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>"🆘 **Emergency Services:**
+
+**Immediate Danger:**
+• Police/Fire/EMS: 911
+
+**Crisis Support:**
+• Suicide Prevention: 988 or 1-888-NYC-WELL
+• Domestic Violence: 1-800-621-HOPE (4673)
+• Child Abuse: 1-800-342-3720
+• Elder Abuse: 1-844-697-3505
+
+**Housing Emergencies:**
+• No Heat/Water: 311 (emergency HPD)
+• Homelessness: 311 (connects to DHS)
+• Emergency Shelter: 1-877-399-4357
+
+**Mental Health:**
+• NYC Well (24/7): 1-888-692-9355
+• Text "WELL" to 65173"</pre>
+                </div>
+
+                <h3>D. Escalation Paths</h3>
+
+                <h4>When Your Issue Isn't Resolved</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-label">Escalation Process</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre>"If your 311 request wasn't handled properly:
+
+**Step 1: Check Status**
+• Use your SR# to check: nyc.gov/311central
+• Verify it was actually closed vs. still pending
+
+**Step 2: File Follow-Up**
+• Report it again, note it's a follow-up
+• Reference original SR#
+• Mark as "not resolved"
+
+**Step 3: Escalate**
+• Contact 311 Customer Service: 212-NEW-YORK (639-9675)
+• Reach out to your City Council Member: council.nyc.gov
+• Contact local Community Board
+
+**Step 4: Formal Complaints**
+• DOI (Department of Investigation) for city employee misconduct
+• Public Advocate's office
+• Comptroller's office"</pre>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>NYC 311 Chat Assistant Project Plan</strong></p>
+            <p>Implementation guide for AI-powered citizen service platform</p>
+        </footer>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top of content
+            document.querySelector('.content').scrollTop = 0;
+        }
+
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = `
+                    <svg class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Copied!
+                `;
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+    </script>
+</body>
+</html>

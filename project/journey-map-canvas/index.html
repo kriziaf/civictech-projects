@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Journey Map</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #FAFAFA;
+        }
+
+        /* ── Top bar ── */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #toggleBtn {
+            padding: 10px 28px;
+            border: 2px solid #949494;
+            border-radius: 16px;
+            background: white;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        #toggleBtn:hover { background: black; color: white; }
+        #toggleBtn.saving { background: black; color: white; }
+
+        /* ── Container ── */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            border: 2px solid #949494;
+            border-radius: 16px;
+            padding: 30px;
+            background: #FAFAFA;
+        }
+
+        /* ══ PERSONA CARD ══ */
+        .persona-section {
+            border: 2px solid #949494;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 36px;
+            background: white;
+        }
+
+        .persona-header {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .persona-image {
+            width: 90px; height: 90px;
+            border: 2px solid #949494;
+            border-radius: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 38px;
+        }
+
+        .persona-details { flex: 1; }
+
+        .persona-name {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        /* Summary view */
+        .summary-view {
+            border-radius: 12px;
+            padding: 14px;
+            min-height: 70px;
+            line-height: 1.7;
+            font-size: 14px;
+            background: #FAFAFA;
+        }
+
+        /* Summary edit */
+        .summary-edit { display: none; }
+
+        .summary-edit .textarea-component {
+            width: 100%;
+            position: relative;
+        }
+
+        .summary-edit .textarea-component label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #949494;
+            margin-bottom: 6px;
+        }
+
+        .summary-edit textarea {
+            width: 100%;
+            min-height: 120px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            padding: 12px 14px;
+            border: 2px solid #949494;
+            border-radius: 12px;
+            resize: vertical;
+            background: #fafafa;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            color: #333;
+        }
+
+        .summary-edit textarea:focus {
+            border-color: #555;
+            box-shadow: 0 0 0 3px rgba(148,148,148,0.15);
+            background: white;
+        }
+
+        .summary-edit .char-hint {
+            font-size: 10px;
+            color: #aaa;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* Expectations + Pain Points side by side */
+        .persona-lists {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 2px solid #949494;
+        }
+
+        /* Expectations */
+        .expectations {
+            flex: 1;
+        }
+
+        .expectations h3 {
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .persona-lists { flex-direction: column; gap: 16px; }
+        }
+
+        .exp-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .exp-item-view {
+            display: flex;
+            gap: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .exp-item-view::before { content: "•"; flex-shrink: 0; }
+
+        .exp-item-edit {
+            display: none;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .exp-item-edit::before { content: "•"; flex-shrink: 0; margin-top: 6px; }
+
+        .exp-item-edit textarea {
+            flex: 1;
+            min-height: 38px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            padding: 6px 8px;
+            border: 1px solid #999;
+            resize: vertical;
+        }
+
+        /* ══ JOURNEY PHASES ══ */
+        .journey-phases {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .phase {
+            border: 2px solid #949494;
+            border-radius: 16px;
+            padding: 14px;
+            background: white;
+        }
+
+        .phase-header {
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #949494;
+            margin-bottom: 12px;
+        }
+
+        .phase-title {
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .phase-duration { font-size: 12px; }
+
+        /* Emoji rating */
+        .emoji-rating {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .emoji-btn {
+            font-size: 22px;
+            background: none;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.15s, background 0.15s, transform 0.1s;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .emoji-btn:hover {
+            border-color: #949494;
+            background: #f5f5f5;
+            transform: scale(1.15);
+        }
+
+        .emoji-btn.selected {
+            border-color: #949494;
+            background: #f0f0f0;
+            transform: scale(1.2);
+        }
+
+        /* When only the selected emoji is visible, center it nicely */
+        .emoji-rating:has(.emoji-btn:not([style*="none"])) {
+            justify-content: center;
+        }
+
+        .emoji-label {
+            text-align: center;
+            font-size: 10px;
+            color: #777;
+            margin-top: 2px;
+            min-height: 14px;
+        }
+
+        /* Steps view */
+        .steps-view { margin-bottom: 16px; }
+
+        .step-view-item {
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        /* Steps edit */
+        .steps-edit { display: none; margin-bottom: 16px; }
+
+        .steps-edit textarea {
+            display: block;
+            width: 100%;
+            min-height: 52px;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.5;
+            padding: 6px;
+            border: 1px solid #999;
+            margin-bottom: 6px;
+            resize: vertical;
+        }
+
+        /* Quote view */
+        .quote-view {
+            border: 2px solid #949494;
+            border-radius: 16px;
+            padding: 9px 10px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            font-style: italic;
+            line-height: 1.5;
+            position: relative;
+            background: white;
+        }
+
+        .quote-view::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 18px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #949494;
+        }
+
+        /* Quote edit */
+        .quote-edit {
+            display: none;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .quote-edit textarea {
+            width: 100%;
+            min-height: 52px;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            font-style: italic;
+            line-height: 1.5;
+            padding: 9px 10px;
+            border: 2px dashed #555;
+            resize: vertical;
+        }
+
+        /* Add buttons */
+        .add-btn {
+            display: none;
+            width: 100%;
+            padding: 6px;
+            margin-top: 6px;
+            border: 2px dashed #949494;
+            background: white;
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .add-btn:hover { background: #f5f5f5; }
+
+        /* ══ BOTTOM SECTIONS ══ */
+        .bottom-section {
+            margin-top: 16px;
+            border: 2px solid #949494;
+            border-radius: 16px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .bottom-section-header {
+            background: #f5f5f5;
+            border-bottom: 2px solid #949494;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .bottom-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .bottom-cell {
+            padding: 14px;
+            border-right: 1px solid #949494;
+            min-height: 80px;
+        }
+
+        .bottom-cell:last-child { border-right: none; }
+
+        .combined-row { margin-bottom: 8px; }
+
+        .combined-label {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #949494;
+            margin-bottom: 4px;
+        }
+
+        .combined-divider {
+            border-top: 1px dashed #ccc;
+            margin: 10px 0;
+        }
+
+        .bottom-cell-view {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+            min-height: 50px;
+        }
+
+        .bottom-cell-edit { display: none; }
+
+        .bottom-cell-edit textarea {
+            width: 100%;
+            min-height: 60px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            padding: 6px 8px;
+            border: 1px solid #949494;
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-grid { grid-template-columns: 1fr; }
+            .bottom-cell { border-right: none; border-bottom: 1px solid #949494; }
+            .bottom-cell:last-child { border-bottom: none; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .bottom-grid { grid-template-columns: repeat(2, 1fr); }
+            .bottom-cell:nth-child(2n) { border-right: none; }
+        }
+
+        /* Footer notes */
+        .footer-notes {
+            max-width: 1400px;
+            margin: 14px auto 0;
+            font-size: 12px;
+            color: #555;
+            line-height: 2;
+        }
+        .footer-notes a {
+            color: black;
+            text-decoration: underline;
+        }
+        .footer-notes a:hover { color: #555; }
+
+        /* Contenteditable highlight in edit mode */
+        body.edit-mode [contenteditable="true"] {
+            outline: 1px dashed #aaa;
+            padding: 2px 4px;
+        }
+
+        /* ══ MOBILE RESPONSIVE ══ */
+        @media (max-width: 768px) {
+
+            body { padding: 12px; }
+
+            /* Toolbar */
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            h1 {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+
+            #toggleBtn {
+                width: 100%;
+                text-align: center;
+                padding: 12px;
+            }
+
+            /* Container */
+            .container { padding: 16px; }
+
+            /* Persona card */
+            .persona-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .persona-name { text-align: center; }
+
+            /* Journey phases: stack vertically on mobile */
+            .journey-phases {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            /* Phase labels get an indicator of position */
+            .phase-title { font-size: 15px; }
+            .phase-duration { font-size: 13px; }
+
+            /* Slightly larger text in columns on mobile */
+            .step-view-item { font-size: 13px; }
+            .quote-view { font-size: 13px; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+
+            /* Tablet: 2-3 column layout */
+            .journey-phases {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .container { padding: 20px; }
+
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <h1>User Journey Map</h1>
+        <button id="toggleBtn" onclick="toggleEditSave()">✏️ Edit</button>
+    </div>
+
+    <div class="container">
+
+        <!-- PERSONA CARD -->
+        <div class="bottom-section" style="margin-top: 0; margin-bottom: 36px;">
+            <div class="bottom-section-header">Persona</div>
+            <div style="padding: 24px;">
+                <div class="persona-header">
+                    <div class="persona-image">👤</div>
+                    <div class="persona-details">
+                        <div class="persona-name" id="personaName" contenteditable="false">Emotional Eric</div>
+
+                        <div class="summary-view" id="summaryView">
+                            <strong>Eric is an emotional car buyer. He purchases based on aesthetics and status.</strong><br><br>
+                            <strong>Scenario:</strong> Eric recently moved to the area. He is shopping for a car that is fun to drive and dependable enough for use for everyday commuting.
+                        </div>
+                        <div class="summary-edit" id="summaryEdit">
+                            <div class="textarea-component">
+                                <label for="summaryTextarea">Persona Description</label>
+                                <textarea id="summaryTextarea" oninput="updateCharCount(this)">Eric is an emotional car buyer. He purchases based on aesthetics and status.
+
+Scenario: Eric recently moved to the area. He is shopping for a car that is fun to drive and dependable enough for use for everyday commuting.</textarea>
+                                <div class="char-hint" id="charHint">0 characters</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-lists">
+                    <div class="expectations">
+                        <h3>Expectations</h3>
+                        <div class="exp-list" id="expList">
+                            <div class="exp-row">
+                                <div class="exp-item-view">Ability to compare cars and their breakdowns</div>
+                                <div class="exp-item-edit"><textarea>Ability to compare cars and their breakdowns</textarea></div>
+                            </div>
+                            <div class="exp-row">
+                                <div class="exp-item-view">Good photography with closeups, inside and out</div>
+                                <div class="exp-item-edit"><textarea>Good photography with closeups, inside and out</textarea></div>
+                            </div>
+                            <div class="exp-row">
+                                <div class="exp-item-view">Video overview of car with demonstrations</div>
+                                <div class="exp-item-edit"><textarea>Video overview of car with demonstrations</textarea></div>
+                            </div>
+                        </div>
+                        <button class="add-btn" id="addExpBtn" onclick="addExpectation()">+ Add Expectation</button>
+                    </div>
+
+                    <div class="expectations" id="painPointsSection">
+                        <h3>Pain Points</h3>
+                        <div class="exp-list" id="painList">
+                            <div class="exp-row">
+                                <div class="exp-item-view">Limited photo quality on some listings</div>
+                                <div class="exp-item-edit"><textarea>Limited photo quality on some listings</textarea></div>
+                            </div>
+                            <div class="exp-row">
+                                <div class="exp-item-view">No unified map view for dealerships</div>
+                                <div class="exp-item-edit"><textarea>No unified map view for dealerships</textarea></div>
+                            </div>
+                            <div class="exp-row">
+                                <div class="exp-item-view">Test drive process feels long and salesy</div>
+                                <div class="exp-item-edit"><textarea>Test drive process feels long and salesy</textarea></div>
+                            </div>
+                        </div>
+                        <button class="add-btn" id="addPainBtn" onclick="addPainPoint()">+ Add Pain Point</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOURNEY PHASES -->
+        <div class="journey-phases">
+
+            <!-- CONSIDER -->
+            <div class="phase">
+                <div class="phase-header">
+                    <div class="phase-title" contenteditable="false">Consider</div>
+                    <div class="phase-duration" contenteditable="false">1 week</div>
+                </div>
+                <div class="emoji-rating">
+                    <button class="emoji-btn" title="Happy" onclick="selectEmoji(this, '😊')">😊</button>
+                    <button class="emoji-btn" title="Neutral" onclick="selectEmoji(this, '😐')">😐</button>
+                    <button class="emoji-btn" title="Sad" onclick="selectEmoji(this, '😢')">😢</button>
+                    <button class="emoji-btn" title="Frustrated" onclick="selectEmoji(this, '😤')">😤</button>
+                    <button class="emoji-btn" title="Angry" onclick="selectEmoji(this, '😠')">😠</button>
+                </div>
+                <div class="emoji-label"></div>
+                <div class="steps-view">
+                    <div class="step-view-item">1. Sees TV commercial for a website, YourCarNext.net, which helps people shop for vehicles; visits the website</div>
+                    <div class="step-view-item">2. Sees ad on Facebook</div>
+                </div>
+                <div class="steps-edit">
+                    <textarea>1. Sees TV commercial for a website, YourCarNext.net, which helps people shop for vehicles; visits the website</textarea>
+                    <textarea>2. Sees ad on Facebook</textarea>
+                    <button class="add-btn" style="display:block" onclick="addStep(this)">+ Add Step</button>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"Wow that website looks great for car shopping!"</div>
+                    <div class="quote-edit"><textarea>"Wow that website looks great for car shopping!"</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"This website looks much different from the commercial."</div>
+                    <div class="quote-edit"><textarea>"This website looks much different from the commercial."</textarea></div>
+                </div>
+                <button class="add-btn phase-add-quote" onclick="addQuote(this)">+ Add Quote</button>
+            </div>
+
+            <!-- EXPLORE -->
+            <div class="phase">
+                <div class="phase-header">
+                    <div class="phase-title" contenteditable="false">Explore</div>
+                    <div class="phase-duration" contenteditable="false">2 months</div>
+                </div>
+                <div class="emoji-rating">
+                    <button class="emoji-btn" title="Happy" onclick="selectEmoji(this, '😊')">😊</button>
+                    <button class="emoji-btn" title="Neutral" onclick="selectEmoji(this, '😐')">😐</button>
+                    <button class="emoji-btn" title="Sad" onclick="selectEmoji(this, '😢')">😢</button>
+                    <button class="emoji-btn" title="Frustrated" onclick="selectEmoji(this, '😤')">😤</button>
+                    <button class="emoji-btn" title="Angry" onclick="selectEmoji(this, '😠')">😠</button>
+                </div>
+                <div class="emoji-label"></div>
+                <div class="steps-view">
+                    <div class="step-view-item">3. Explores site and looks at all vehicles in his budget</div>
+                    <div class="step-view-item">4. Creates account; saves favorite cars in wishlist</div>
+                    <div class="step-view-item">5. Downloads mobile app while at his office</div>
+                </div>
+                <div class="steps-edit">
+                    <textarea>3. Explores site and looks at all vehicles in his budget</textarea>
+                    <textarea>4. Creates account; saves favorite cars in wishlist</textarea>
+                    <textarea>5. Downloads mobile app while at his office</textarea>
+                    <button class="add-btn" style="display:block" onclick="addStep(this)">+ Add Step</button>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I like that I can save cars and a list is automatically made"</div>
+                    <div class="quote-edit"><textarea>"I like that I can save cars and a list is automatically made"</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I'm disappointed by the quality of some listings... very few photos."</div>
+                    <div class="quote-edit"><textarea>"I'm disappointed by the quality of some listings... very few photos."</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"This mobile app is missing alot of features."</div>
+                    <div class="quote-edit"><textarea>"This mobile app is missing alot of features."</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I might miss the perfect car if I don't check the site multiples times a day"</div>
+                    <div class="quote-edit"><textarea>"I might miss the perfect car if I don't check the site multiples times a day"</textarea></div>
+                </div>
+                <button class="add-btn phase-add-quote" onclick="addQuote(this)">+ Add Quote</button>
+            </div>
+
+            <!-- COMPARE -->
+            <div class="phase">
+                <div class="phase-header">
+                    <div class="phase-title" contenteditable="false">Compare</div>
+                    <div class="phase-duration" contenteditable="false">1 month</div>
+                </div>
+                <div class="emoji-rating">
+                    <button class="emoji-btn" title="Happy" onclick="selectEmoji(this, '😊')">😊</button>
+                    <button class="emoji-btn" title="Neutral" onclick="selectEmoji(this, '😐')">😐</button>
+                    <button class="emoji-btn" title="Sad" onclick="selectEmoji(this, '😢')">😢</button>
+                    <button class="emoji-btn" title="Frustrated" onclick="selectEmoji(this, '😤')">😤</button>
+                    <button class="emoji-btn" title="Angry" onclick="selectEmoji(this, '😠')">😠</button>
+                </div>
+                <div class="emoji-label"></div>
+                <div class="steps-view">
+                    <div class="step-view-item">6. Reads Consumer Reports and reviews; keeps a spreadsheet to compare cars</div>
+                    <div class="step-view-item">7. Consults with trusted individuals</div>
+                    <div class="step-view-item">8. Constantly checks site for new options that meet his criteria</div>
+                </div>
+                <div class="steps-edit">
+                    <textarea>6. Reads Consumer Reports and reviews; keeps a spreadsheet to compare cars</textarea>
+                    <textarea>7. Consults with trusted individuals</textarea>
+                    <textarea>8. Constantly checks site for new options that meet his criteria</textarea>
+                    <button class="add-btn" style="display:block" onclick="addStep(this)">+ Add Step</button>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I wish all car dealerships were shown on a single map, so I can plan my route."</div>
+                    <div class="quote-edit"><textarea>"I wish all car dealerships were shown on a single map, so I can plan my route."</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"It's difficult to narrow down options and parse through competing resources. I have to use a spreadsheet."</div>
+                    <div class="quote-edit"><textarea>"It's difficult to narrow down options and parse through competing resources. I have to use a spreadsheet."</textarea></div>
+                </div>
+                <button class="add-btn phase-add-quote" onclick="addQuote(this)">+ Add Quote</button>
+            </div>
+
+            <!-- TEST -->
+            <div class="phase">
+                <div class="phase-header">
+                    <div class="phase-title" contenteditable="false">Test</div>
+                    <div class="phase-duration" contenteditable="false">2 weeks</div>
+                </div>
+                <div class="emoji-rating">
+                    <button class="emoji-btn" title="Happy" onclick="selectEmoji(this, '😊')">😊</button>
+                    <button class="emoji-btn" title="Neutral" onclick="selectEmoji(this, '😐')">😐</button>
+                    <button class="emoji-btn" title="Sad" onclick="selectEmoji(this, '😢')">😢</button>
+                    <button class="emoji-btn" title="Frustrated" onclick="selectEmoji(this, '😤')">😤</button>
+                    <button class="emoji-btn" title="Angry" onclick="selectEmoji(this, '😠')">😠</button>
+                </div>
+                <div class="emoji-label"></div>
+                <div class="steps-view">
+                    <div class="step-view-item">9. Selects a set of cars he plans to test-drive</div>
+                    <div class="step-view-item">10. Looks up location of each dealership on Google Maps</div>
+                    <div class="step-view-item">11. Visits dealership; fills out lead card, discusses process with sales person, drives car, discusses more; repeats process for each car</div>
+                    <div class="step-view-item">12. Discovers he can take notes about each car he drives in the app</div>
+                </div>
+                <div class="steps-edit">
+                    <textarea>9. Selects a set of cars he plans to test-drive</textarea>
+                    <textarea>10. Looks up location of each dealership on Google Maps</textarea>
+                    <textarea>11. Visits dealership; fills out lead card, discusses process with sales person, drives car, discusses more; repeats process for each car</textarea>
+                    <textarea>12. Discovers he can take notes about each car he drives in the app</textarea>
+                    <button class="add-btn" style="display:block" onclick="addStep(this)">+ Add Step</button>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I love that I can take notes about these cars in the app. So helpful!"</div>
+                    <div class="quote-edit"><textarea>"I love that I can take notes about these cars in the app. So helpful!"</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"Why does it take sooo long to test drive a car? I wish I knew it was going to be procedural and salesy."</div>
+                    <div class="quote-edit"><textarea>"Why does it take sooo long to test drive a car? I wish I knew it was going to be procedural and salesy."</textarea></div>
+                </div>
+                <button class="add-btn phase-add-quote" onclick="addQuote(this)">+ Add Quote</button>
+            </div>
+
+            <!-- NEGOTIATE -->
+            <div class="phase">
+                <div class="phase-header">
+                    <div class="phase-title" contenteditable="false">Negotiate</div>
+                    <div class="phase-duration" contenteditable="false">1 week</div>
+                </div>
+                <div class="emoji-rating">
+                    <button class="emoji-btn" title="Happy" onclick="selectEmoji(this, '😊')">😊</button>
+                    <button class="emoji-btn" title="Neutral" onclick="selectEmoji(this, '😐')">😐</button>
+                    <button class="emoji-btn" title="Sad" onclick="selectEmoji(this, '😢')">😢</button>
+                    <button class="emoji-btn" title="Frustrated" onclick="selectEmoji(this, '😤')">😤</button>
+                    <button class="emoji-btn" title="Angry" onclick="selectEmoji(this, '😠')">😠</button>
+                </div>
+                <div class="emoji-label"></div>
+                <div class="steps-view">
+                    <div class="step-view-item">13. Decides on a car</div>
+                    <div class="step-view-item">14. Gets financing terms, total price, monthly payment from salesperson</div>
+                    <div class="step-view-item">15. Researches more, specifically about price</div>
+                    <div class="step-view-item">16. Makes a competing offer and buys his new car</div>
+                </div>
+                <div class="steps-edit">
+                    <textarea>13. Decides on a car</textarea>
+                    <textarea>14. Gets financing terms, total price, monthly payment from salesperson</textarea>
+                    <textarea>15. Researches more, specifically about price</textarea>
+                    <textarea>16. Makes a competing offer and buys his new car</textarea>
+                    <button class="add-btn" style="display:block" onclick="addStep(this)">+ Add Step</button>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I'm so happy with my new car!"</div>
+                    <div class="quote-edit"><textarea>"I'm so happy with my new car!"</textarea></div>
+                </div>
+                <div class="quote-row">
+                    <div class="quote-view">"I wonder if I can get a better deal??"</div>
+                    <div class="quote-edit"><textarea>"I wonder if I can get a better deal??"</textarea></div>
+                </div>
+                <button class="add-btn phase-add-quote" onclick="addQuote(this)">+ Add Quote</button>
+            </div>
+
+        </div>
+
+        <!-- OPPORTUNITY -->
+        <div class="bottom-section">
+            <div class="bottom-section-header">Opportunity</div>
+            <div class="bottom-grid">
+                <div class="bottom-cell">
+                    <div class="bottom-cell-view"></div>
+                    <div class="bottom-cell-edit"><textarea placeholder="Add opportunity..."></textarea></div>
+                </div>
+                <div class="bottom-cell">
+                    <div class="bottom-cell-view"></div>
+                    <div class="bottom-cell-edit"><textarea placeholder="Add opportunity..."></textarea></div>
+                </div>
+                <div class="bottom-cell">
+                    <div class="bottom-cell-view"></div>
+                    <div class="bottom-cell-edit"><textarea placeholder="Add opportunity..."></textarea></div>
+                </div>
+                <div class="bottom-cell">
+                    <div class="bottom-cell-view"></div>
+                    <div class="bottom-cell-edit"><textarea placeholder="Add opportunity..."></textarea></div>
+                </div>
+                <div class="bottom-cell">
+                    <div class="bottom-cell-view"></div>
+                    <div class="bottom-cell-edit"><textarea placeholder="Add opportunity..."></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERNAL OWNERSHIP & METRICS -->
+        <div class="bottom-section">
+            <div class="bottom-section-header">Internal Ownership &amp; Metrics</div>
+            <div class="bottom-grid bottom-grid-3">
+
+                <div class="bottom-cell">
+                    <div class="combined-row">
+                        <div class="combined-label">Ownership</div>
+                        <div class="bottom-cell-view ownership-view"></div>
+                        <div class="bottom-cell-edit ownership-edit"><textarea placeholder="Add owner..."></textarea></div>
+                    </div>
+                    <div class="combined-divider"></div>
+                    <div class="combined-row">
+                        <div class="combined-label">Metrics</div>
+                        <div class="bottom-cell-view metrics-view"></div>
+                        <div class="bottom-cell-edit metrics-edit"><textarea placeholder="Add metric..."></textarea></div>
+                    </div>
+                </div>
+
+                <div class="bottom-cell">
+                    <div class="combined-row">
+                        <div class="combined-label">Ownership</div>
+                        <div class="bottom-cell-view ownership-view"></div>
+                        <div class="bottom-cell-edit ownership-edit"><textarea placeholder="Add owner..."></textarea></div>
+                    </div>
+                    <div class="combined-divider"></div>
+                    <div class="combined-row">
+                        <div class="combined-label">Metrics</div>
+                        <div class="bottom-cell-view metrics-view"></div>
+                        <div class="bottom-cell-edit metrics-edit"><textarea placeholder="Add metric..."></textarea></div>
+                    </div>
+                </div>
+
+                <div class="bottom-cell">
+                    <div class="combined-row">
+                        <div class="combined-label">Ownership</div>
+                        <div class="bottom-cell-view ownership-view"></div>
+                        <div class="bottom-cell-edit ownership-edit"><textarea placeholder="Add owner..."></textarea></div>
+                    </div>
+                    <div class="combined-divider"></div>
+                    <div class="combined-row">
+                        <div class="combined-label">Metrics</div>
+                        <div class="bottom-cell-view metrics-view"></div>
+                        <div class="bottom-cell-edit metrics-edit"><textarea placeholder="Add metric..."></textarea></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        let editing = false;
+
+        function selectEmoji(btn, label) {
+            // Deselect siblings in the same rating group
+            const group = btn.closest('.emoji-rating');
+            group.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            // Update label below
+            const labelEl = group.nextElementSibling;
+            if (labelEl && labelEl.classList.contains('emoji-label')) {
+                const names = { '😊': 'Happy', '😐': 'Neutral', '😢': 'Sad', '😤': 'Frustrated', '😠': 'Angry' };
+                labelEl.textContent = names[label] || label;
+            }
+        }
+
+        function updateCharCount(ta) {
+            const hint = document.getElementById('charHint');
+            if (hint) hint.textContent = ta.value.length + ' characters';
+        }
+
+        function toggleEditSave() {
+            editing = !editing;
+            const btn = document.getElementById('toggleBtn');
+
+            if (editing) {
+                enterEditMode();
+                btn.textContent = '💾 Save';
+                btn.classList.add('saving');
+                document.body.classList.add('edit-mode');
+            } else {
+                saveAndExit();
+                btn.textContent = '✏️ Edit';
+                btn.classList.remove('saving');
+                document.body.classList.remove('edit-mode');
+            }
+        }
+
+        function enterEditMode() {
+            // Persona name
+            document.getElementById('personaName').contentEditable = 'true';
+
+            // Summary
+            document.getElementById('summaryView').style.display = 'none';
+            document.getElementById('summaryEdit').style.display = 'block';
+            const ta = document.getElementById('summaryTextarea');
+            updateCharCount(ta);
+
+            // Expectations
+            document.querySelectorAll('.exp-row').forEach(row => {
+                const v = row.querySelector('.exp-item-view');
+                const e = row.querySelector('.exp-item-edit');
+                e.querySelector('textarea').value = v.textContent.trim();
+                v.style.display = 'none';
+                e.style.display = 'flex';
+            });
+            document.getElementById('addExpBtn').style.display = 'block';
+
+            // Pain Points
+            document.querySelectorAll('#painList .exp-row').forEach(row => {
+                const v = row.querySelector('.exp-item-view');
+                const e = row.querySelector('.exp-item-edit');
+                e.querySelector('textarea').value = v.textContent.trim();
+                v.style.display = 'none';
+                e.style.display = 'flex';
+            });
+            document.getElementById('addPainBtn').style.display = 'block';
+
+            // Phase headers
+            document.querySelectorAll('.phase-title, .phase-duration').forEach(el => {
+                el.contentEditable = 'true';
+            });
+
+            // Steps
+            document.querySelectorAll('.steps-view').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.steps-edit').forEach(el => el.style.display = 'block');
+
+            // Quotes
+            document.querySelectorAll('.quote-row').forEach(row => {
+                const v = row.querySelector('.quote-view');
+                const e = row.querySelector('.quote-edit');
+                e.querySelector('textarea').value = v.textContent.trim();
+                v.style.display = 'none';
+                e.style.display = 'block';
+            });
+
+            // Add-quote buttons
+            document.querySelectorAll('.phase-add-quote').forEach(el => el.style.display = 'block');
+
+            // Emoji — show all buttons again for re-selection
+            document.querySelectorAll('.emoji-btn').forEach(btn => btn.style.display = 'flex');
+
+            // Bottom sections (simple cells — Opportunity)
+            document.querySelectorAll('.bottom-cell-edit:not(.ownership-edit):not(.metrics-edit)').forEach(e => {
+                const v = e.previousElementSibling;
+                if (v && v.classList.contains('bottom-cell-view')) {
+                    e.querySelector('textarea').value = v.textContent.trim();
+                    v.style.display = 'none';
+                    e.style.display = 'block';
+                }
+            });
+
+            // Combined cells — Ownership & Metrics
+            document.querySelectorAll('.ownership-edit, .metrics-edit').forEach(e => {
+                const v = e.previousElementSibling;
+                e.querySelector('textarea').value = v.textContent.trim();
+                v.style.display = 'none';
+                e.style.display = 'block';
+            });
+        }
+
+        function saveAndExit() {
+            // Persona name
+            document.getElementById('personaName').contentEditable = 'false';
+
+            // Summary
+            const rawSummary = document.getElementById('summaryTextarea').value;
+            document.getElementById('summaryView').innerHTML = rawSummary
+                .split('\n')
+                .map(l => l === '' ? '<br>' : l)
+                .join('<br>');
+            document.getElementById('summaryView').style.display = 'block';
+            document.getElementById('summaryEdit').style.display = 'none';
+
+            // Expectations
+            document.querySelectorAll('.exp-row').forEach(row => {
+                const v = row.querySelector('.exp-item-view');
+                const e = row.querySelector('.exp-item-edit');
+                v.textContent = e.querySelector('textarea').value.trim();
+                v.style.display = 'flex';
+                e.style.display = 'none';
+            });
+            document.getElementById('addExpBtn').style.display = 'none';
+
+            // Pain Points
+            document.querySelectorAll('#painList .exp-row').forEach(row => {
+                const v = row.querySelector('.exp-item-view');
+                const e = row.querySelector('.exp-item-edit');
+                v.textContent = e.querySelector('textarea').value.trim();
+                v.style.display = 'flex';
+                e.style.display = 'none';
+            });
+            document.getElementById('addPainBtn').style.display = 'none';
+
+            // Phase headers
+            document.querySelectorAll('.phase-title, .phase-duration').forEach(el => {
+                el.contentEditable = 'false';
+            });
+
+            // Steps — rebuild view from textareas
+            document.querySelectorAll('.phase').forEach(phase => {
+                const sv = phase.querySelector('.steps-view');
+                const se = phase.querySelector('.steps-edit');
+                sv.innerHTML = '';
+                se.querySelectorAll('textarea').forEach(ta => {
+                    const d = document.createElement('div');
+                    d.className = 'step-view-item';
+                    d.textContent = ta.value.trim();
+                    sv.appendChild(d);
+                });
+                sv.style.display = 'block';
+                se.style.display = 'none';
+            });
+
+            // Quotes
+            document.querySelectorAll('.quote-row').forEach(row => {
+                const v = row.querySelector('.quote-view');
+                const e = row.querySelector('.quote-edit');
+                v.textContent = e.querySelector('textarea').value.trim();
+                v.style.display = 'block';
+                e.style.display = 'none';
+            });
+
+            // Add-quote buttons
+            document.querySelectorAll('.phase-add-quote').forEach(el => el.style.display = 'none');
+
+            // Emoji — hide unselected buttons, show only the selected one (or all if none selected)
+            document.querySelectorAll('.emoji-rating').forEach(group => {
+                const selected = group.querySelector('.emoji-btn.selected');
+                group.querySelectorAll('.emoji-btn').forEach(btn => {
+                    btn.style.display = selected
+                        ? (btn === selected ? 'flex' : 'none')
+                        : 'flex';
+                });
+            });
+
+            // Bottom sections (simple cells — Opportunity)
+            document.querySelectorAll('.bottom-cell-edit:not(.ownership-edit):not(.metrics-edit)').forEach(e => {
+                const v = e.previousElementSibling;
+                if (v && v.classList.contains('bottom-cell-view')) {
+                    v.textContent = e.querySelector('textarea').value.trim();
+                    v.style.display = 'block';
+                    e.style.display = 'none';
+                }
+            });
+
+            // Combined cells — Ownership & Metrics
+            document.querySelectorAll('.ownership-edit, .metrics-edit').forEach(e => {
+                const v = e.previousElementSibling;
+                v.textContent = e.querySelector('textarea').value.trim();
+                v.style.display = 'block';
+                e.style.display = 'none';
+            });
+        }
+
+        function addStep(btn) {
+            const ta = document.createElement('textarea');
+            ta.placeholder = 'Enter new step...';
+            btn.parentElement.insertBefore(ta, btn);
+        }
+
+        function addQuote(btn) {
+            const phase = btn.closest('.phase');
+            const row = document.createElement('div');
+            row.className = 'quote-row';
+
+            const vDiv = document.createElement('div');
+            vDiv.className = 'quote-view';
+            vDiv.style.display = 'none';
+
+            const eDiv = document.createElement('div');
+            eDiv.className = 'quote-edit';
+            eDiv.style.display = 'block';
+            const ta = document.createElement('textarea');
+            ta.placeholder = '"Type quote here..."';
+            eDiv.appendChild(ta);
+
+            row.appendChild(vDiv);
+            row.appendChild(eDiv);
+            phase.insertBefore(row, btn);
+        }
+
+        function addExpectation() {
+            const list = document.getElementById('expList');
+            const row = document.createElement('div');
+            row.className = 'exp-row';
+            const vEl = document.createElement('div');
+            vEl.className = 'exp-item-view';
+            vEl.style.display = 'none';
+            const eEl = document.createElement('div');
+            eEl.className = 'exp-item-edit';
+            eEl.style.display = 'flex';
+            const ta = document.createElement('textarea');
+            ta.placeholder = 'Enter new expectation...';
+            eEl.appendChild(ta);
+            row.appendChild(vEl);
+            row.appendChild(eEl);
+            list.appendChild(row);
+        }
+
+        function addPainPoint() {
+            const list = document.getElementById('painList');
+            const row = document.createElement('div');
+            row.className = 'exp-row';
+            const vEl = document.createElement('div');
+            vEl.className = 'exp-item-view';
+            vEl.style.display = 'none';
+            const eEl = document.createElement('div');
+            eEl.className = 'exp-item-edit';
+            eEl.style.display = 'flex';
+            const ta = document.createElement('textarea');
+            ta.placeholder = 'Enter new pain point...';
+            eEl.appendChild(ta);
+            row.appendChild(vEl);
+            row.appendChild(eEl);
+            list.appendChild(row);
+        }
+    </script>
+
+    <div class="footer-notes">
+        <p>* Mapping guide and example lifted from <a href="https://www.nngroup.com/articles/journey-mapping-101/" target="_blank">NNG</a></p>
+        <p>* Improve this page through <a href="https://civictechie.github.io" target="_blank">civictechie.github.io</a></p>
+    </div>
+</body>
+</html>
